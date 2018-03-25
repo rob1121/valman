@@ -6,7 +6,7 @@ export const WIN_WIDTH = Dimensions.get('window').width;
 export const WIN_HEIGHT = Dimensions.get('window').height;
 
 // export const ROOT_URL = 'http://beachfrontparking.com';
-export const ROOT_URL = 'http://99.122.157.77/beach_front_parking/index.php';
+export const ROOT_URL = 'http://99.122.157.77/beach_front_parking';
 export const REGISTER_TOKEN_URL = `${ROOT_URL}/api/register_token.php`;
 export const LOGIN_URL = `${ROOT_URL}/api/login.php`;
 export const LOGOUT_URL = `${ROOT_URL}/api/logout.php`;

@@ -1,42 +1,52 @@
 import React, {Component} from 'react';
-import {Alert, View, ScrollView, Text} from 'react-native';
-import {List, ListItem} from 'react-native-elements';
+import {Platform, PickerIOS, Picker, TextInput, Alert, View, ScrollView, Text} from 'react-native';
+import {Button, Header, List, ListItem, Icon} from 'react-native-elements';
 import axios from 'axios';
-import {setValidationActiveTask} from '../actions';
-import {UPDATE_VALIDATION_TASK_URL} from '../constants';
 import {connect} from 'react-redux';
+import {toUpper} from 'lodash';
+import {setValidationActiveTask} from '../actions';
+import {UPDATE_VALIDATION_TASK_URL, MAIN_COLOR, HOME_NAV} from '../constants';
 
 class ValidationActiveTask extends Component {
+  state = {
+    loading: false
+  }
+
   render() {
-    const {active_task} = this.props.validation_task;
+    const {active_task} = this.props.validation_list;
     return (
       <View style={{ flex: 1 }}>
-      <ScrollView
+      <Header
+          leftComponent={<Icon name='md-arrow-round-back' type='ionicon' color='#fff' onPress={() => this.props.setValidationActiveTask(null)} />}
+          centerComponent={{ text: active_task.ticket_number || '-', style: { color: '#fff' } }}
+        />
+      
+      <ScrollView keyboardShouldPersistTaps={'handled'}
         style={{ marginTop: 20}}
       >
-        <List> containerStyle={{marginBottom: 20}}>
+        <List containerStyle={{marginBottom: 20}}>
           <ListItem
             hideChevron
-            title={active_task.ticketno || '-'}
+            title={active_task.ticket_number || '-'}
             subtitle='TICKET NO.'
           />
           
           <ListItem
             hideChevron
-            title={active_task.requestor || '-'}
-            subtitle='REQUESTOR'
+            title={active_task.guest_name || '-'}
+            subtitle='GUEST NAME'
           />
           
           <ListItem
             hideChevron
-            title={active_task.driver}
-            subtitle='DRIVER'
+            title={active_task.checkin_date}
+            subtitle='CHECKIN DATE'
           />
           
           <ListItem
             hideChevron
-            title={active_task.car_model ? (`${active_task.car_make} | ${active_task.car_model}`) : '-'}
-            subtitle='CAR MAKE/MODEL.'
+            title={active_task.checkout_date || '-'}
+            subtitle='CHECKOUT DATE'
           />
           
           <ListItem
@@ -47,15 +57,19 @@ class ValidationActiveTask extends Component {
           
           <ListItem
             hideChevron
-            title={(active_task.status_id == 2 || active_task.status_id == 4) 
-              ? <TextInput
+            title={Platform.OS == 'ios' ? this._iosPicker() : this._androidPicker()}
+            subtitle='IS VALID'
+          />
+          
+          <ListItem
+            hideChevron
+            title={<TextInput
                 multiline={true}
                 numberOfLines={4}
                 underlineColorAndroid='transparent'
                 style={{ padding: 5, height: 100, borderColor: 'gray', borderWidth: 1 }}
-                onChangeText={(text) => this.props.updateActiveCar({ comment: text })}
-                value={active_task.comment} />
-              : (active_task.comment || '-')}
+                onChangeText={(text) => this.props.setValidationActiveTask({ comment: text })}
+                value={active_task.comment} />}
             subtitle='COMMENT'
           />
         </List>
@@ -71,6 +85,28 @@ class ValidationActiveTask extends Component {
     );
   }
 
+  _iosPicker() {
+    return (
+      <PickerIOS
+        selectedValue={this.props.validation_list.active_task.validated}
+        onValueChange={(itemValue) => this.props.setValidationActiveTask({validated: itemValue})}>
+        <PickerIOS.Item label='NO' value='0' />
+        <PickerIOS.Item label='YES' value='1' />
+      </PickerIOS>
+    )
+  }
+
+  _androidPicker() {
+    return (
+      <Picker
+        selectedValue={this.props.validation_list.active_task.validated}
+        onValueChange={(itemValue) => this.props.setValidationActiveTask({validated: itemValue})}>
+        <Picker.Item label='NO' value='0' />
+        <Picker.Item label='YES' value='1' />
+      </Picker>
+    )
+  }
+
   _updateTask() {
     Alert.alert(
       'Task Confirmation',
@@ -78,15 +114,22 @@ class ValidationActiveTask extends Component {
       [
         {text: 'Cancel', style: 'cancel'},
         {text: 'OK', onPress: () => {
-          axios.post(UPDATE_VALIDATION_TASK_URL, {
-            task: this.props.validation_task.active_task,
-          }).then(() => this.props.setValidationActiveTask({}));
+          this.setState({loading: true});
+          axios.post(UPDATE_VALIDATION_TASK_URL, this.props.validation_list.active_task)
+          .then(({data}) => {
+            console.log(data);
+
+            this.setState({loading: false});
+            this.props.setValidationActiveTask(null);
+            this.props.nav.navigate(HOME_NAV);
+          })
+          .catch((error) => console.log(error));
         }},
       ]
     );
   }
 }
 
-const stateToProps = ({validation_task}) => ({validation_task});
+const stateToProps = ({validation_list, nav}) => ({validation_list, nav});
 
 export default connect(stateToProps, {setValidationActiveTask})(ValidationActiveTask);

@@ -14,7 +14,10 @@ export default (state = INITIAL_STATE, action) => {
     case SET_VALIDATION_ACTIVE_TASK: {
       return {
         ...state,
-        acive_task: action.payload,
+        active_task: action.payload ? {
+          ...state.active_task,
+          ...action.payload
+        } : {},
       }
     }
     case SET_VALIDATION_LIST: {
