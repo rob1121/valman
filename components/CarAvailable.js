@@ -64,12 +64,12 @@ class CarAvailable extends Component
     const { emptyTaskContainer} = styles;
     const { car_assign, nav, user, selected_location} = this.props;
     let carsAssign = car_assign.task_list;
-    if(this.props.user.type == 'ramp') {
-      carsAssign = filter(car_assign.task_list, (task) => {
-        task.requestor = toLower(task.requestor || '');
-        return task.requestor.includes(toLower(selected_location));
-      });
-    }
+    // if(this.props.user.type == 'ramp') {
+    //   carsAssign = filter(car_assign.task_list, (task) => {
+    //     task.requestor = toLower(task.requestor || '');
+    //     return task.requestor.includes(toLower(selected_location));
+    //   });
+    // }
     return (
       <View style={{flex: 1}}>
         <Header
