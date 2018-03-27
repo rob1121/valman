@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
-import {TouchableHighlight, Picker, Modal, PickerIOS, View, Platform} from 'react-native';
+import {TouchableOpacity, TouchableHighlight, Picker, Modal, PickerIOS, View, Platform} from 'react-native';
 import {Text, Button, FormInput} from 'react-native-elements';
 import axios from 'axios';
 import {map, toUpper} from 'lodash';
+import ModalFilterPicker from 'react-native-modal-filter-picker'
 import {CAR_LIST_URL, MAIN_COLOR} from '../constants';
 
 export default class CarPicker extends Component {
   state = {
     cars: {},
     showModal: false,
+    visible: false,
+    picked: null,
   }
 
   componentDidMount() {
@@ -19,8 +22,42 @@ export default class CarPicker extends Component {
   }
 
   render() {
+    const { visible, picked } = this.state;
+
+    const options = [
+      {
+        key: 'kenya',
+        label: 'Kenya',
+      },
+      {
+        key: 'uganda',
+        label: 'Uganda',
+      },
+      {
+        key: 'libya',
+        label: 'Libya',
+      },
+      {
+        key: 'morocco',
+        label: 'Morocco',
+      },
+      {
+        key: 'estonia',
+        label: 'Estonia',
+      },
+    ];
     return (
-      <View>
+      <View><TouchableOpacity onPress={this.onShow}>
+      <Text>Select country</Text>
+    </TouchableOpacity>      
+    <Text>Selected:</Text>
+    <Text>{picked}</Text>
+    <ModalFilterPicker
+      visible={visible}
+      onSelect={this.onSelect}
+      onCancel={this.onCancel}
+      options={options}
+    />
         {Platform.OS === 'ios' 
         ? <TouchableHighlight 
         onPress={() => this.setState({...this.state, showModal: true})}>
@@ -31,6 +68,23 @@ export default class CarPicker extends Component {
         {Platform.OS === 'ios' && this._pickerIOS()}
       </View>
     );
+  }
+
+  onShow = () => {
+    this.setState({ visible: true });
+  }
+
+  onSelect = (picked) => {
+    this.setState({
+      picked: picked,
+      visible: false
+    })
+  }
+
+  onCancel = () => {
+    this.setState({
+      visible: false
+    });
   }
 
   _pickerAndroid() {
