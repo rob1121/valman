@@ -11,6 +11,7 @@ import Option from './RampForm/Option';
 import CarDetailsInput from './RampForm/CarDetailsInput';
 import Comment from './RampForm/Comment';
 import SubmitBtn from './RampForm/SubmitBtn';
+import CheckOutDate from './CheckOutDate';
 
 class Hotel extends Component {
   state = {
@@ -88,80 +89,14 @@ class Hotel extends Component {
           <FormValidationMessage>{has(error,'room_number') && error.room_number}</FormValidationMessage>
 
         <FormLabel>CHECKOUT DATE</FormLabel>
-        {Platform.OS === 'ios' ? <TouchableHighlight 
-        onPress={() => this.setState({...this.state, showDatePicker: true})}>
-        <Text
-        textStyle={{size: 24}}>{toUpper(this.props.car.checkout_date)}(click to edit)</Text>
-      </TouchableHighlight> : this._androidDatePicker()}
+        <CheckOutDate date={this.props.car.checkout_date} onDateChange={(checkout_date) => this.props.setCarInfo({ checkout_date })} />
         
         <FormValidationMessage>{has(error,'checkout_date') && error.checkout_date}</FormValidationMessage>
         <CarDetailsInput />
         <Comment />
         <SubmitBtn />
-
-        {Platform.OS === 'ios' && this._iosDatePicker()}
       </View>
     )
-  }
-
-  _iosDatePicker() {
-    return (
-      
-      <Modal
-        animationType="fade"
-        transparent={false}
-        visible={this.state.showDatePicker}
-        onRequestClose={() => {
-          this.setState(() => ({ ...this.state, showDatePicker: false }))
-        }}>
-        <View style={{ flex: 1}}>
-    <DatePickerIOS
-      date={new Date(this.props.car.checkout_date)}
-      mode="date"
-      onDateChange={(newDate) => this._updateCheckoutDate(newDate)}
-    />
-
-    <Button
-      backgroundColor={MAIN_COLOR}
-      title='DONE'
-      onPress={() => this.setState(() => ({ ...this.state, showDatePicker: false }))}
-    />
-  </View>
-</Modal>);
-  }
-
-  _updateCheckoutDate(newDate) {
-
-    const date = newDate.getDate() > 9 ? newDate.getDate() + 1 : `0${newDate.getDate()+1}`
-
-    const month = newDate.getMonth() > 9 ? newDate.getMonth() + 1 : `0${newDate.getMonth() + 1}`
-
-    this.props.setCarInfo({ checkout_date: `${newDate.getFullYear()}-${month}-${date}` })
-    this.setState({ chosenDate: newDate});
-  }
-
-  _androidDatePicker() {
-    return (<View style={{ flexDirection: 'row', width: WIN_WIDTH }}>
-      <View style={{ width: WIN_WIDTH * 0.8 }}>
-        <FormInput onChangeText={(val) => this.props.setCarInfo({ checkout_date: val })} value={this.props.car.checkout_date} />
-      </View>
-      <View style={{ width: WIN_WIDTH * 0.2 }}>
-        <Icon
-          name='calendar'
-          type='font-awesome'
-          onPress={this._datePicker} />
-      </View>
-    </View>);
-  }
-
-  _datePicker = async () => {
-    try {
-      const {action, year, month, day} = await DatePickerAndroid.open();
-      const date = `${year}-${("0" + (month+1)).slice(-2)}-${("0" + day).slice(-2)}`;
-      this.props.setCarInfo({ checkout_date: date });
-    } catch ({code, message}) {
-      console.warn('Cannot open date picker', message);
-    }
   }
 }
 
