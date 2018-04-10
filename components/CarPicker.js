@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, TouchableHighlight, Picker, Modal, PickerIOS, View, Platform} from 'react-native';
+import {TouchableOpacity, View, Platform} from 'react-native';
 import {Text, Button, FormInput} from 'react-native-elements';
 import axios from 'axios';
-import {map, toUpper} from 'lodash';
+import { map, toUpper, findIndex} from 'lodash';
 import ModalFilterPicker from 'react-native-modal-filter-picker'
 import {CAR_LIST_URL, MAIN_COLOR} from '../constants';
 
@@ -11,7 +11,6 @@ export default class CarPicker extends Component {
     cars: {},
     showModal: false,
     visible: false,
-    picked: null,
   }
 
   componentDidMount() {
@@ -22,50 +21,30 @@ export default class CarPicker extends Component {
   }
 
   render() {
-    const { visible, picked } = this.state;
+    const { visible } = this.state;
 
-    const options = [
-      {
-        key: 'kenya',
-        label: 'Kenya',
-      },
-      {
-        key: 'uganda',
-        label: 'Uganda',
-      },
-      {
-        key: 'libya',
-        label: 'Libya',
-      },
-      {
-        key: 'morocco',
-        label: 'Morocco',
-      },
-      {
-        key: 'estonia',
-        label: 'Estonia',
-      },
-    ];
+    const options = map(this.state.cars, (item, index) => {
+      return {
+        key: item.model,
+        label: toUpper(`${item.make}|${item.model}`),
+      };
+    });
+
+    const selected = findIndex(options, (option) => option.key == this.props.value);
+
     return (
-      <View><TouchableOpacity onPress={this.onShow}>
-      <Text>Select country</Text>
-    </TouchableOpacity>      
-    <Text>Selected:</Text>
-    <Text>{picked}</Text>
-    <ModalFilterPicker
-      visible={visible}
-      onSelect={this.onSelect}
-      onCancel={this.onCancel}
-      options={options}
-    />
-        {Platform.OS === 'ios' 
-        ? <TouchableHighlight 
-        onPress={() => this.setState({...this.state, showModal: true})}>
-        <Text
-        textStyle={{size: 24}}>{toUpper(this.props.value)}(click to edit)</Text>
-           </TouchableHighlight>
-        : this._pickerAndroid()}
-        {Platform.OS === 'ios' && this._pickerIOS()}
+      <View>
+        <TouchableOpacity onPress={this.onShow}>
+          <Text textStyle={{ size: 24 }}>{toUpper(selected == -1 ? 'N/A' : options[selected].label)}</Text>
+        </TouchableOpacity>
+        {/* this opensource ModalFilterPicker been modified
+        included onrequestclose function */}
+        <ModalFilterPicker
+          visible={visible}
+          onSelect={this.onSelect}
+          onCancel={this.onCancel}
+          options={options}
+        />
       </View>
     );
   }
@@ -75,8 +54,8 @@ export default class CarPicker extends Component {
   }
 
   onSelect = (picked) => {
+    this.props.onValueChange(picked);
     this.setState({
-      picked: picked,
       visible: false
     })
   }
@@ -85,47 +64,5 @@ export default class CarPicker extends Component {
     this.setState({
       visible: false
     });
-  }
-
-  _pickerAndroid() {
-    return (
-      <Picker
-        selectedValue={this.props.value}
-        onValueChange={(itemValue) => this.props.onValueChange(itemValue)}>
-        <Picker.Item label='N/A' value='' />
-        {map(this.state.cars, (item, index) => {
-          return <Picker.Item key={index} label={toUpper(`${item.make}|${item.model}`)} value={item.model} />
-        })}
-      </Picker>
-    );
-  }
-
-  _pickerIOS() {
-    return (
-      <Modal
-        animationType="fade"
-        transparent={false}
-        visible={this.state.showModal}
-        onRequestClose={() => {
-          this.setState(() => ({ ...this.state, showModal: false }))
-        }}>
-        <View style={{ flex: 1}}>
-          <PickerIOS
-            selectedValue={this.props.value}
-            onValueChange={(itemValue) => this.props.onValueChange(itemValue)}>
-            <PickerIOS.Item label='N/A' value='' />
-            {map(this.state.cars, (item, index) => {
-              return <PickerIOS.Item key={index} label={toUpper(`${item.make}|${item.model}`)} value={item.model} />
-            })}
-          </PickerIOS>
-
-          <Button
-            backgroundColor={MAIN_COLOR}
-            title='DONE'
-            onPress={() => this.setState(() => ({ ...this.state, showModal: false }))}
-          />
-        </View>
-      </Modal>
-    );
   }
 }

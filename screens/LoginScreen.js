@@ -51,17 +51,17 @@ class LoginScreen extends Component
     }).then(({data}) => {
       this.setState(() => ({ loading: false }));
       if(data.error) {
-        alert(data.msg);
-        return;
+        this.setState(() => ({ ...this.state, hasStoredData: false}));
+        alert(data.msg);;
+      } else {
+        AsyncStorage.multiSet([['username', username], ['password', password]]);
+  
+        this.props.setUser(data.data);
+        this.props.navigation.navigate(HOME_NAV);
       }
-
-      AsyncStorage.multiSet([['username', username], ['password', password]]);
-
-      this.props.setUser(data.data);
-      this.props.navigation.navigate(HOME_NAV);
     }).catch((error) => {
       this.setState(() => ({ loading: false }));
-      console.log(error);
+      console.log('error', error);
     });
   }
 

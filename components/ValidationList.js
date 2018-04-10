@@ -9,13 +9,18 @@ import {VALIDATION_LIST_URL} from '../constants';
 import ValidationActiveTask from './ValidationActiveTask';
 
 class ValidationList extends Component {
+  constructor() {
+    super();
+    this._fetchCarForValidation = this._fetchCarForValidation.bind(this);
+    this._generateListItem = this._generateListItem.bind(this);
+    this._refreshValidationList = this._refreshValidationList.bind(this);
+    this._selectTask = this._selectTask.bind(this);
+  }
   state = {
     refreshing: false,
   }
 
-  componentWillMount() {
-    this._fetchCarForValidation();
-  }
+  componentWillMount = () => this._fetchCarForValidation
 
   render() {
     if(!isEmpty(this.props.validation_list.active_task)) {
@@ -32,26 +37,27 @@ class ValidationList extends Component {
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
-              onRefresh={() => this._fetchCarForValidation()}
+              onRefresh={this._fetchCarForValidation}
             />
           }
         >
-        {!isEmpty(this.props.validation_list.list) && <List>
-          {map(this.props.validation_list.list, (task, i) => {
-            
-            return (<ListItem
-              key={i}
-              title={`${toUpper(task.guest_name)}: ${task.car_plate_no}`}
-              subtitle={`#${task.ticket_number} ${task.ori_checkout_date}`}
-              leftIcon={{ name: 'directions-car' }}
-              onPress={() => this._selectTask(task)}
-            />);
-          })}
-        </List>}
-        {isEmpty(this.props.validation_list.list) && <Text style={{justifyContent:'center'}}>No Car For Validation</Text>}
+          {!isEmpty(this.props.validation_list.list) 
+            ? <List>{map(this.props.validation_list.list, this._generateListItem)}</List>
+            : <Text style={{textAlignVertical: "center",textAlign: "center"}}>No Car For Validation</Text>
+          }
         </ScrollView>
       </View>
     )
+  }
+
+  _generateListItem(task, i) {
+    return (<ListItem
+      key={i}
+      title={`${toUpper(task.guest_name)}: ${task.car_plate_no}`}
+      subtitle={`#${task.ticket_number} ${task.checkout_date}`}
+      leftIcon={{ name: 'directions-car' }}
+      onPress={() => this._selectTask(task)}
+    />);
   }
 
   _selectTask(task) {
@@ -61,14 +67,17 @@ class ValidationList extends Component {
   _fetchCarForValidation() {
     this.setState({ ...this.state, refreshing: true});
 
-    axios.post(VALIDATION_LIST_URL, {
-      hotel_name: this.props.user.hotel_name
-    })
-    .then(({data}) => {
-      this.props.setValidationActiveTask(null);
-      this.props.setValidationList(data);
-      this.setState({ ...this.state, refreshing: false});
-    }).catch((error) => console.log(error));
+    axios
+      .post(VALIDATION_LIST_URL, {hotel_name: this.props.user.hotel_name})
+      .then(this._refreshValidationList)
+      .catch((error) => console.log(error))
+    ;
+  }
+
+  _refreshValidationList({data}) {
+    this.props.setValidationActiveTask(null);
+    this.props.setValidationList(data);
+    this.setState({ ...this.state, refreshing: false});
   }
 }
 
