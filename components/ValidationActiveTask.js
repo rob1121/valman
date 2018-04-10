@@ -60,7 +60,7 @@ class ValidationActiveTask extends Component {
           
           <ListItem
             hideChevron
-            title={active_task.checkin_date}
+            title={active_task.ori_checkin_date}
             subtitle='CHECKIN DATE'
           />
           
