@@ -9,9 +9,12 @@ import CarPicker from '../CarPicker';
 
 const CarDetailsInput = (props) => (
   <View>
+    <FormLabel>CAR COLOR</FormLabel>
+    <FormInput onChangeText={car_color => props.setCarInfo({ car_color })} value={props.car.car_color} />
+
     <FormLabel>CAR PLATE NO</FormLabel>
-    <FormInput onChangeText={(val) => props.setCarInfo({ car_plate_no: val })} value={props.car.car_plate_no}/>
-        <FormValidationMessage>{has(props.error, 'car_plate_no') && props.error.car_plate_no}</FormValidationMessage>
+    <FormInput onChangeText={car_plate_no => props.setCarInfo({ car_plate_no })} value={props.car.car_plate_no} />
+    <FormValidationMessage>{has(props.error, 'car_plate_no') && props.error.car_plate_no}</FormValidationMessage>
 
     <FormLabel>CAR MAKE&MODEL</FormLabel>
     <View style={{margin: 15}}>
