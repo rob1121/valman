@@ -14,10 +14,10 @@ class Steps extends Component
 {
   constructor() {
     super();
-    this._updateCarList = this._updateCarList.bind(This);
-    this._errHandler = this._errHandler.bind(This);
-    this._updateStatus = this._updateStatus.bind(This);
-    this._confirm = this._confirm.bind(This);
+    this._updateCarList = this._updateCarList.bind(this);
+    this._errHandler = this._errHandler.bind(this);
+    this._updateStatus = this._updateStatus.bind(this);
+    this._confirm = this._confirm.bind(this);
   }
 
   state = {

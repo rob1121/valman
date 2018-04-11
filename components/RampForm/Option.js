@@ -35,9 +35,7 @@ class  Option extends Component {
         animationType="fade"
         transparent={false}
         visible={this.state.showModal}
-        onRequestClose={() => {
-          this.setState(() => ({ ...this.state, showModal: false }))
-        }}>
+        onRequestClose={() => this.setState(() => ({ ...this.state, showModal: false }))}>
         <View style={{ flex: 1}}>
           <PickerIOS
             style={{ margin: 15 }}
