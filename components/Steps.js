@@ -62,17 +62,17 @@ class Steps extends Component
             subtitle='TICKET NO.'
           />
 
-          <ListItem
+          {active_task.ticket_type == 'hotel' && <ListItem
             hideChevron
             title={active_task.guest_name || '-'}
             subtitle='GUEST NAME'
-          />
+          />}
 
-          <ListItem
+          {active_task.ticket_type == 'hotel' && <ListItem
             hideChevron
             title={active_task.room_number || '-'}
             subtitle='ROOM NUMBER'
-          />
+          />}
 
           <ListItem
             hideChevron

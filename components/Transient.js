@@ -26,12 +26,13 @@ class Transient extends Component {
         
         <FormLabel>HOTEL NAME</FormLabel>
         <View style={{margin: 15}}>
-          <Text>{car.name}</Text>
+          <Text  style={{marginLeft: 5}}>{car.name}</Text>
         </View>
         <FormValidationMessage>{has(error, 'name') && error.name}</FormValidationMessage>
 
         <FormLabel>CONTACT NO.</FormLabel>
         <FormInput 
+          inputStyle={{marginLeft: 5}}
           onChangeText={(val) => setCarInfo({ contact_no: val })} 
           value={car.contact_no}
           placeholder='09xxxxxxxxx'
