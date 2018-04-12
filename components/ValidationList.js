@@ -54,7 +54,7 @@ class ValidationList extends Component {
     return (<ListItem
       key={i}
       title={`${toUpper(task.guest_name)}: ${task.car_plate_no}`}
-      subtitle={`#${task.ticket_number} ${task.checkout_date}`}
+      subtitle={`#${task.ticket_number} ${task.ori_checkout_date}`}
       leftIcon={{ name: 'directions-car' }}
       onPress={() => this._selectTask(task)}
     />);

@@ -14,6 +14,10 @@ import SubmitBtn from './RampForm/SubmitBtn';
 import CheckOutDate from './CheckOutDate';
 
 class Hotel extends Component {
+  constructor() {
+    super();
+    this._searchTicket = this._searchTicket.bind(this);
+  }
   state = {
     hasValidTicket: false,
     loading: false,
@@ -30,6 +34,11 @@ class Hotel extends Component {
 
     return (
       <View>
+        <FormLabel>HOTEL NAME</FormLabel>
+        <View style={{ margin: 15 }}>
+          <Text style={{marginLeft: 5}}>{car.name}</Text>
+        </View>
+        <FormValidationMessage>{has(error, 'name') && error.name}</FormValidationMessage>
         <Barcode />
         {this.state.hasValidTicket  && <FormValidationMessage>{has(error, 'ticketno') && error.ticketno}</FormValidationMessage>}
         {
@@ -40,7 +49,7 @@ class Hotel extends Component {
             backgroundColor={MAIN_COLOR} 
             icon={{name: 'search'}} 
             title='SEARCH' 
-            onPress={() => this._searchTicket()} />
+            onPress={this._searchTicket} />
         }
       </View>
     );
@@ -48,7 +57,7 @@ class Hotel extends Component {
 
   _searchTicket() {
     this.setState(() => ({loading: true}));
-    axios.post(SEARCH_TICKET_URL, {ticketno: this.props.car.ticketno}).then(({data}) => {
+    axios.post(SEARCH_TICKET_URL, {hotel: this.props.car.name, ticketno: this.props.car.ticketno}).then(({data}) => {
       let hasValidTicket = false;
       if(data.error) {
         alert(data.msg);
@@ -69,27 +78,21 @@ class Hotel extends Component {
     return (
       <View>
         <Option />
-
-        <FormLabel>HOTEL NAME</FormLabel>
-        <View style={{ margin: 15 }}>
-          <Text>{car.name}</Text>
-        </View>
-        <FormValidationMessage>{has(error, 'name') && error.name}</FormValidationMessage>
         
         <FormLabel>GUEST NAME</FormLabel>
-        <FormInput onChangeText={(val) => setCarInfo({ guest_name: val })} value={car.guest_name} />
+        <FormInput onChangeText={guest_name => setCarInfo({guest_name})} value={car.guest_name} />
           <FormValidationMessage>{has(error,'guest_name') && error.guest_name}</FormValidationMessage>
 
         <FormLabel>FOLIO NUMBER</FormLabel>
-        <FormInput onChangeText={(val) => setCarInfo({ folio_number: val })} value={car.folio_number} />
+        <FormInput onChangeText={folio_number => setCarInfo({folio_number})} value={car.folio_number} />
           <FormValidationMessage>{has(error,'folio_number') && error.folio_number}</FormValidationMessage>
 
         <FormLabel>ROOM NUMBER</FormLabel>
-        <FormInput onChangeText={(val) => setCarInfo({ room_number: val })} value={car.room_number} />
+        <FormInput onChangeText={room_number => setCarInfo({room_number})} value={car.room_number} />
           <FormValidationMessage>{has(error,'room_number') && error.room_number}</FormValidationMessage>
 
         <FormLabel>CHECKOUT DATE</FormLabel>
-        <CheckOutDate date={this.props.car.checkout_date} onDateChange={(checkout_date) => this.props.setCarInfo({ checkout_date })} />
+        <CheckOutDate date={this.props.car.checkout_date} onDateChange={(checkout_date) => setCarInfo({ checkout_date })} />
         
         <FormValidationMessage>{has(error,'checkout_date') && error.checkout_date}</FormValidationMessage>
         <CarDetailsInput />

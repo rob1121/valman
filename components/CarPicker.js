@@ -33,7 +33,7 @@ export default class CarPicker extends Component {
     const selected = findIndex(options, (option) => option.key == this.props.value);
 
     return (
-      <View>
+      <View style={{marginLeft: 10}}>
         <TouchableOpacity onPress={this.onShow}>
           <Text textStyle={{ size: 24 }}>{toUpper(selected == -1 ? 'N/A' : options[selected].label)}</Text>
         </TouchableOpacity>
