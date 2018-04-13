@@ -20,7 +20,7 @@ class ValidationList extends Component {
     refreshing: false,
   }
 
-  componentWillMount = () => this._fetchCarForValidation
+  componentWillMount = this._fetchCarForValidation
 
   render() {
     if(!isEmpty(this.props.validation_list.active_task)) {

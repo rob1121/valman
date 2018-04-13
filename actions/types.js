@@ -19,3 +19,9 @@ export const SET_ERRORS = 'set_errors';
 
 export const SET_VALIDATION_ACTIVE_TASK = 'set_validation_active_task';
 export const SET_VALIDATION_LIST = 'set_validation_list';
+
+export const SET_SELECTED_ACTIVE_TASK = 'set_selected_active_task';
+export const SET_ACTIVE_TASK_LIST = 'set_active_task_list';
+
+
+export * from './validation_list_actions';

@@ -10,11 +10,11 @@ import Barcode from './Barcode';
 import CarDetailsInput from './RampForm/CarDetailsInput';
 import Comment from './RampForm/Comment';
 import SubmitBtn from './RampForm/SubmitBtn';
+import CheckOutDate from './CheckOutDate';
 
 class Transient extends Component {
-  componentWillMount() {
-    this.props.setCarInfo({ name: this.props.selected_location });
-  }
+  componentWillMount = () => this.props.setCarInfo({ name: this.props.selected_location });
+
   render() {
     const {setCarInfo, car, error} = this.props;
 
@@ -30,10 +30,14 @@ class Transient extends Component {
         </View>
         <FormValidationMessage>{has(error, 'name') && error.name}</FormValidationMessage>
 
+        <FormLabel>CHECKOUT DATE</FormLabel>
+        <CheckOutDate date={this.props.car.checkout_date} onDateChange={checkout_date => setCarInfo({ checkout_date })} />
+
+
         <FormLabel>CONTACT NO.</FormLabel>
         <FormInput 
           inputStyle={{marginLeft: 5}}
-          onChangeText={(val) => setCarInfo({ contact_no: val })} 
+          onChangeText={contact_no => setCarInfo({ contact_no })} 
           value={car.contact_no}
           placeholder='09xxxxxxxxx'
           dataDetectorTypes='phoneNumber'
