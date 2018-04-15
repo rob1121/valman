@@ -11,10 +11,16 @@ import {
   HOME_NAV,
   LOGIN_NAV,
   RAMP_ADD_CAR_NAV,
+  ACTIVE_TASK_LIST_NAV,
   LOGOUT_URL
 } from '../constants';
 
 class Footer extends Component {
+
+  constructor() {
+    super();
+    this._logout = this._logout.bind(this);
+  }
   _logout() {
     Alert.alert(
       'Logout Confirmation',
@@ -59,18 +65,30 @@ class Footer extends Component {
           color={this._screenMenuColor(HOME_NAV)}
           onPress={this._screenMenuOnPress(HOME_NAV)}
         />
-        {this.props.user.type === 'ramp' ? <Icon 
-          name='barcode-scan' 
-          type='material-community' 
-          color={this._screenMenuColor(RAMP_ADD_CAR_NAV)}
-          onPress={this._screenMenuOnPress(RAMP_ADD_CAR_NAV)}
-        /> : null}
+
+        {this.props.user.type === 'ramp' && 
+          <Icon 
+            name='tasklist' 
+            type='octicon' 
+            color={this._screenMenuColor(ACTIVE_TASK_LIST_NAV)}
+            onPress={this._screenMenuOnPress(ACTIVE_TASK_LIST_NAV)}
+          />
+        }
+
+        {this.props.user.type === 'ramp' && 
+          <Icon 
+            name='barcode-scan' 
+            type='material-community' 
+            color={this._screenMenuColor(RAMP_ADD_CAR_NAV)}
+            onPress={this._screenMenuOnPress(RAMP_ADD_CAR_NAV)}
+          />
+        }
 
         <Icon 
           name='sign-out' 
           type='font-awesome' 
           color={NOT_ACTIVE_SCREEN_COLOR}
-          onPress={() => this._logout()}
+          onPress={this._logout}
         />
 
       </Header>

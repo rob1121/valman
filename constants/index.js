@@ -24,6 +24,8 @@ export const SEARCH_TICKET_URL = `${ROOT_URL}/api/search_ticket.php`;
 export const SEARCH_MONTHLY_USER_URL = `${ROOT_URL}/api/search_monthly_user.php`;
 export const VALIDATION_LIST_URL = `${ROOT_URL}/api/validation_list.php`;
 export const UPDATE_VALIDATION_TASK_URL = `${ROOT_URL}/api/update_validation_task.php`;
+export const ACTIVE_TASK_LIST_URL = `${ROOT_URL}/api/active_Task_list.php`;
+
 export const ACTIVE_SCREEN_COLOR = '#222';
 export const NOT_ACTIVE_SCREEN_COLOR = '#757575';
 export const DISABLE_SCREEN_COLOR = '#cccccc';
@@ -31,6 +33,7 @@ export const DISABLE_SCREEN_COLOR = '#cccccc';
 export const HOME_NAV = 'Home';
 export const LOGIN_NAV = 'Login';
 export const RAMP_ADD_CAR_NAV = 'RampAddCar';
+export const ACTIVE_TASK_LIST_NAV = 'ActiveTaskList';
 
 
 export const VALET_ON_THE_WAY = 2;

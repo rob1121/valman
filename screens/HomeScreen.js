@@ -12,46 +12,58 @@ import Steps from '../components/Steps';
 
 class HomeScreen extends Component 
 {
+  constructor() {
+    super();
+    this._fetchCarsAssign = this._fetchCarsAssign.bind(this);
+    this._fetchCarForValidation = this._fetchCarForValidation.bind(this);
+    this._onBackPress = this._onBackPress.bind(this);
+    this._setCarForValidationList = this._setCarForValidationList.bind(this);
+    this._setCarAssigned = this._setCarAssigned.bind(this);
+    this._errHandler = this._errHandler.bind(this);
+  }
+
   state ={
     pageLoad: false,
   }
 
   componentWillMount() {
-    this._notificationSubscription = Notifications.addListener(() => this._fetchCarsAssign());
-    this.backHandlerListener = BackHandler.addEventListener(
-      'hardwareBackPress', 
-      () => {
-        this.props.setActiveScreen(HOME_NAV);
-        return true;
-      }
-    );
+    this._notificationSubscription = Notifications.addListener(this._fetchCarsAssign);
+    this.backHandlerListener = BackHandler.addEventListener('hardwareBackPress', this._onBackPress);
 
     this.props.user.type === 'manager' ? this._fetchCarForValidation() : this._fetchCarsAssign();
 
     this.props.setActiveScreen(HOME_NAV);
   }
 
-  componentWillUnmount() {
-    this.backHandlerListener.remove();
-  }
+  componentWillUnmount = this.backHandlerListener.remove
+  
+  _errHandler = error => console.log(error)
 
   _fetchCarForValidation() {
-    axios.post(VALIDATION_LIST_URL, {
-      hotel_name: this.props.user.hotel_name
-    })
-    .then(({data}) => {
-      this.props.setValidationActiveTask(null);
-      this.props.setValidationList(data);
-      this.setState(() => ({ pageLoad: true}));
-    }).catch((error) => console.log(error));
+    axios.post(VALIDATION_LIST_URL, {hotel_name: this.props.user.hotel_name})
+      .then(this._setCarForValidationList)
+      .catch(this._errHandler)
+    ;
   }
 
   _fetchCarsAssign() {
-    axios.post(CAR_ASSIGN_URL, this.props.user).then(({data}) => {
-      this.props.assignCars(data);
-      this.setState(() => ({ pageLoad: true}));
-    }).catch((error) => { console.error(error); });
+    axios.post(CAR_ASSIGN_URL, this.props.user)
+      .then(this._setCarAssigned)
+      .catch(this._errHandler)
+    ;
   }
+
+  _setCarAssigned({data}) {
+    this.props.assignCars(data);
+    this.setState(() => ({ pageLoad: true}));
+  }
+
+  _setCarForValidationList({data}) {
+    this.props.setValidationActiveTask(null);
+    this.props.setValidationList(data);
+    this.setState(() => ({ pageLoad: true}));
+  }
+
 
   _loader() {
     return (
@@ -59,6 +71,11 @@ class HomeScreen extends Component
         <ActivityIndicator size="large" color={MAIN_COLOR} />
       </View>
     )
+  }
+
+  _onBackPress() {
+    this.props.setActiveScreen(HOME_NAV);
+    return true;
   }
 
   _homePage() {
