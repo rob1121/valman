@@ -24,7 +24,7 @@ export const SEARCH_TICKET_URL = `${ROOT_URL}/api/search_ticket.php`;
 export const SEARCH_MONTHLY_USER_URL = `${ROOT_URL}/api/search_monthly_user.php`;
 export const VALIDATION_LIST_URL = `${ROOT_URL}/api/validation_list.php`;
 export const UPDATE_VALIDATION_TASK_URL = `${ROOT_URL}/api/update_validation_task.php`;
-export const ACTIVE_TASK_LIST_URL = `${ROOT_URL}/api/active_Task_list.php`;
+export const ACTIVE_TASK_LIST_URL = `${ROOT_URL}/api/active_task_list.php`;
 
 export const ACTIVE_SCREEN_COLOR = '#222';
 export const NOT_ACTIVE_SCREEN_COLOR = '#757575';

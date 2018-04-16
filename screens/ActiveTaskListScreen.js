@@ -38,16 +38,16 @@ class ActiveTaskListScreen extends Component
   }
 
   _fetchActiveTaskList() {
-    axios.post(ACTIVE_TASK_LIST_URL, {hotel_name: this.props.user.hotel_name})
+    this.setState(() => ({ pageLoad: true}));
+    axios.post(ACTIVE_TASK_LIST_URL, {base: this.props.user.base})
       .then(this._updateActiveTaskList)
       .catch(this._errHandler)
     ;
   }
 
   _updateActiveTaskList({data}) {
-    console.log(data);
     this.props.setActiveTaskList(null);
-    this.setState(() => ({ pageLoad: true}));
+    this.setState(() => ({ pageLoad: false}));
   }
 
   _errHandler = error => console.log(error);
@@ -107,12 +107,23 @@ class ActiveTaskListScreen extends Component
             />
           }
         >
-          {this.props.active_task_list ? this._listItem() : <Text style={emptyTaskContainer}>No record found!.</Text>}
+          {this.props.active_task_list ? this._listItem() : <Text style={styles.emptyTaskContainer}>No record found!.</Text>}
         </ScrollView>
       </View>
     );
   }
 }
+
+
+const styles = {
+  emptyTaskContainer: { 
+    marginTop: 20, 
+    color: '#000', 
+    textAlign: 'center' 
+  },
+};
+
+
 const mapStateToProps = ({ user, active_task_list }) => ({ user, active_task_list });
 
 export default connect(mapStateToProps, { setActiveScreen, setActiveTaskList })(ActiveTaskListScreen);
