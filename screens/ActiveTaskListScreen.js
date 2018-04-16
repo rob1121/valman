@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {ScrollView, RefreshControl, View, BackHandler, Text, AsyncStorage, ActivityIndicator } from 'react-native';
 import {Header, List, ListItem} from 'react-native-elements';
 import {connect} from 'react-redux';
-import {map} from 'lodash';
+import {toUpper, map} from 'lodash';
 import axios from 'axios';
 import {Notifications} from 'expo';
 import {setActiveScreen, setActiveTaskList} from '../actions';
@@ -45,6 +45,7 @@ class ActiveTaskListScreen extends Component
   }
 
   _updateActiveTaskList({data}) {
+    console.log(data);
     this.props.setActiveTaskList(null);
     this.setState(() => ({ pageLoad: true}));
   }
@@ -102,11 +103,11 @@ class ActiveTaskListScreen extends Component
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
-              onRefresh={this._updateActiveTaskList}
+              onRefresh={this._fetchActiveTaskList}
             />
           }
         >
-          {this.props.active_task_list ? this._listItem : <Text style={emptyTaskContainer}>No record found!.</Text>}
+          {this.props.active_task_list ? this._listItem() : <Text style={emptyTaskContainer}>No record found!.</Text>}
         </ScrollView>
       </View>
     );
