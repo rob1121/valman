@@ -109,6 +109,7 @@ class ActiveTaskListScreen extends Component
         >
           {this.props.active_task_list ? this._listItem() : <Text style={styles.emptyTaskContainer}>No record found!.</Text>}
         </ScrollView>
+        <Footer />
       </View>
     );
   }
