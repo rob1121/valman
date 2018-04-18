@@ -1,68 +1,37 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View, Platform} from 'react-native';
-import {Text, Button, FormInput} from 'react-native-elements';
+import {View} from 'react-native';
 import axios from 'axios';
-import { map, toUpper, findIndex} from 'lodash';
-import ModalFilterPicker from 'react-native-modal-filter-picker'
-import {CAR_LIST_URL, MAIN_COLOR} from '../constants';
+import { map, toUpper } from 'lodash';
+import {CAR_LIST_URL} from '../constants';
+import Picker from './Picker';
 
 export default class CarPicker extends Component {
-  state = {
-    cars: {},
-    showModal: false,
-    visible: false,
-  }
+
+  state = {options: []}
 
   componentDidMount() {
     axios.get(CAR_LIST_URL)
-    .then(({data}) => {
-      this.setState(() => ({cars: data}))
-    }).catch((error) => console.log(error));
+      .then(this._setOption)
+      .catch(this._errHandler)
+    ;
   }
 
-  render() {
-    const { visible } = this.state;
-
-    const options = map(this.state.cars, (item, index) => {
+  _setOption = ({data}) => {
+    const options = map(data, (item, index) => {
       return {
         key: item.model,
         label: toUpper(`${item.make}|${item.model}`),
       };
     });
-
-    const selected = findIndex(options, (option) => option.key == this.props.value);
-
-    return (
-      <View style={{marginLeft: 10}}>
-        <TouchableOpacity onPress={this.onShow}>
-          <Text textStyle={{ size: 24 }}>{toUpper(selected == -1 ? 'N/A' : options[selected].label)}</Text>
-        </TouchableOpacity>
-        {/* this opensource ModalFilterPicker been modified
-        included onrequestclose function */}
-        <ModalFilterPicker
-          visible={visible}
-          onSelect={this.onSelect}
-          onCancel={this.onCancel}
-          options={options}
-        />
-      </View>
-    );
+    this.setState(() => ({...this.state, options}));
   }
+  
+  _errHandler = error   => console.error(error);
 
-  onShow = () => {
-    this.setState({ visible: true });
-  }
+  render() {
+    const {value, onValueChange} = this.props;
+    const {options} = this.state;
 
-  onSelect = (picked) => {
-    this.props.onValueChange(picked);
-    this.setState({
-      visible: false
-    })
-  }
-
-  onCancel = () => {
-    this.setState({
-      visible: false
-    });
+    return <Picker value={value} options={options} onValueChange={onValueChange} />;
   }
 }

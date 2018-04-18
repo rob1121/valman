@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Modal, TouchableHighlight, View, Platform, DatePickerIOS, DatePickerAndroid} from 'react-native';
+import { View} from 'react-native';
 import {Text, FormLabel, FormInput, Icon, FormValidationMessage, Button}  from 'react-native-elements';
 import {connect} from 'react-redux';
 import {has, toUpper} from 'lodash';
@@ -14,10 +14,6 @@ import SubmitBtn from './RampForm/SubmitBtn';
 import CheckOutDate from './CheckOutDate';
 
 class Hotel extends Component {
-  constructor() {
-    super();
-    this._searchTicket = this._searchTicket.bind(this);
-  }
   state = {
     hasValidTicket: false,
     loading: false,
@@ -36,7 +32,7 @@ class Hotel extends Component {
       <View>
         <FormLabel>HOTEL NAME</FormLabel>
         <View style={{ margin: 15 }}>
-          <Text style={{marginLeft: 5}}>{car.name}</Text>
+          <Text style={{marginLeft: 5}}>{toUpper(car.name)}</Text>
         </View>
         <FormValidationMessage>{has(error, 'name') && error.name}</FormValidationMessage>
         <Barcode />
@@ -55,7 +51,7 @@ class Hotel extends Component {
     );
   }
 
-  _searchTicket() {
+  _searchTicket = () => {
     this.setState(() => ({loading: true}));
     axios.post(SEARCH_TICKET_URL, {hotel: this.props.car.name, ticketno: this.props.car.ticketno}).then(({data}) => {
       let hasValidTicket = false;
@@ -77,7 +73,10 @@ class Hotel extends Component {
     
     return (
       <View>
+        
+        <FormLabel>OPTION</FormLabel>
         <Option />
+        <FormValidationMessage>{has(error,'opt') && error.opt}</FormValidationMessage>
         
         <FormLabel>GUEST NAME</FormLabel>
         <FormInput onChangeText={guest_name => setCarInfo({guest_name})} value={car.guest_name} />

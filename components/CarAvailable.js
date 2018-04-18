@@ -8,8 +8,7 @@ import {assignCars, setSelectedLocation} from '../actions';
 import { connect } from 'react-redux';
 import RampLocation from '../components/RampLocation';
 
-class CarAvailable extends Component 
-{
+class CarAvailable extends Component {
   state = {
     refreshing: false,
   }
@@ -27,20 +26,27 @@ class CarAvailable extends Component
 
   _fetchCarsAssign() {
     this.setState({ ...this.state, refreshing: true});
-    axios.post(CAR_ASSIGN_URL, this.props.user).then(({ data }) => {
-      this.props.assignCars(data);
-      this.setState({ ...this.state, refreshing: false});
-    }).catch((error) => { console.error(error); });
+    axios.post(CAR_ASSIGN_URL, this.props.user)
+      .then(({ data }) => {
+        this.props.assignCars(data);
+        this.setState({ ...this.state, refreshing: false});
+      }).catch(this._errHandler)
+    ;
   }
 
-  _updateStatus(task) {
+  _updateStatus = task => {
     const {user} = this.props;
-    axios.post(PARKING_STATUS_UPDATE_URL, {task, user}).then(({data}) => {
-      this.props.assignCars(data.data);
-    }).catch((error) => {
-      console.log(error);
-    });
+    axios.post(PARKING_STATUS_UPDATE_URL, {task, user})
+      .then(this._setCars)
+      .catch(this._errHandler)
+    ;
   }
+
+  _setCars = ({data}) => {
+    this.props.assignCars(data.data);
+  }
+  
+  _errHandler = error   => console.error(error);
 
   _listItem(carsAssign) {
     const listItems = map(carsAssign, (task, i) => {
@@ -85,9 +91,7 @@ class CarAvailable extends Component
           }
         >
           {this.props.user.type == 'ramp' && <FormLabel>HOTEL NAME</FormLabel>}
-          {this.props.user.type == 'ramp' && <View style={{ margin: 20 }}>
-            <RampLocation value={this.props.selected_location} setSelectedLocation={(val) => this.props.setSelectedLocation(val)} />
-          </View>}
+          {this.props.user.type == 'ramp' && <RampLocation value={this.props.selected_location} setSelectedLocation={val => this.props.setSelectedLocation(val)} />}
           {!isEmpty(carsAssign) 
             ? this._listItem(carsAssign) 
             : <Text style={emptyTaskContainer}>No record found!.</Text>}

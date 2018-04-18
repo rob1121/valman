@@ -9,13 +9,6 @@ import {VALIDATION_LIST_URL} from '../constants';
 import ValidationActiveTask from './ValidationActiveTask';
 
 class ValidationList extends Component {
-  constructor() {
-    super();
-    this._fetchCarForValidation = this._fetchCarForValidation.bind(this);
-    this._generateListItem = this._generateListItem.bind(this);
-    this._refreshValidationList = this._refreshValidationList.bind(this);
-    this._selectTask = this._selectTask.bind(this);
-  }
   state = {
     refreshing: false,
   }
@@ -50,7 +43,7 @@ class ValidationList extends Component {
     )
   }
 
-  _generateListItem(task, i) {
+  _generateListItem = (task, i) => {
     return (<ListItem
       key={i}
       title={`${toUpper(task.guest_name)}: ${task.car_plate_no}`}
@@ -60,21 +53,21 @@ class ValidationList extends Component {
     />);
   }
 
-  _selectTask(task) {
-    this.props.setValidationActiveTask(task);
-  }
+  _selectTask = task => this.props.setValidationActiveTask(task)
 
-  _fetchCarForValidation() {
+  _fetchCarForValidation = () => {
     this.setState({ ...this.state, refreshing: true});
 
     axios
       .post(VALIDATION_LIST_URL, {hotel_name: this.props.user.hotel_name})
       .then(this._refreshValidationList)
-      .catch((error) => console.log(error))
+      .catch(this._errHandler)
     ;
   }
 
-  _refreshValidationList({data}) {
+  _errHandler = (error) => console.log(error)
+
+  _refreshValidationList = ({data}) => {
     this.props.setValidationActiveTask(null);
     this.props.setValidationList(data);
     this.setState({ ...this.state, refreshing: false});

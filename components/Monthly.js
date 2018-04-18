@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View} from 'react-native';
 import {Text, FormValidationMessage, FormLabel, FormInput, Button}  from 'react-native-elements';
 import {connect} from 'react-redux';
-import {has} from 'lodash';
+import {has, toUpper} from 'lodash';
 import axios from 'axios';
 import {SEARCH_MONTHLY_USER_URL, MAIN_COLOR} from '../constants';
 import {setCarInfo} from '../actions';
@@ -74,11 +74,13 @@ class Monthly extends Component {
     const {setCarInfo, car, error} = this.props;
     return (
       <View>
+        <FormLabel>OPTION</FormLabel>
         <Option />
+        <FormValidationMessage>{has(error,'opt') && error.opt}</FormValidationMessage>
         
         <FormLabel>HOTEL NAME</FormLabel>
         <View style={{ margin: 15 }}>
-          <Text>{car.name}</Text>
+          <Text>{toUpper(car.name)}</Text>
         </View>
 
         <CarDetailsInput />

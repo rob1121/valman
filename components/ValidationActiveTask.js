@@ -1,26 +1,21 @@
 import React, {Component} from 'react';
-import {Platform, PickerIOS, Picker, TextInput, Alert, View, ScrollView, Text} from 'react-native';
+import {TextInput, Alert, View, ScrollView, Text} from 'react-native';
 import {Button, Header, List, ListItem, Icon} from 'react-native-elements';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import {toUpper} from 'lodash';
 import Barcode from 'react-native-barcode-builder';
+import Picker from './Picker'
 import {setValidationActiveTask} from '../actions';
 import {UPDATE_VALIDATION_TASK_URL, MAIN_COLOR, HOME_NAV} from '../constants';
 
 class ValidationActiveTask extends Component {
-  constructor() {
-    super();
-    this._androidPicker = this._androidPicker.bind(this);
-    this._iosPicker = this._iosPicker.bind(this);
-    this._onBackBtnPress = this._onBackBtnPress.bind(this);
-    this._onPickerChangeVal = this._onPickerChangeVal.bind(this);
-    this._onUpdateTaskConfirm = this._onUpdateTaskConfirm.bind(this);
-    this._processUpdateTaskResponse = this._processUpdateTaskResponse.bind(this);
-    this._updateTask = this._updateTask.bind(this);
-  }
   state = {
-    loading: false
+    loading: false,
+    options: [
+      { key: 'validation', label: 'VALIDATION' },
+      { key: 'executive comp', label: 'EXECUTIVE COMP' }
+    ],
   }
 
   render() {
@@ -96,7 +91,7 @@ class ValidationActiveTask extends Component {
           
           <ListItem
             hideChevron
-            title={Platform.OS == 'ios' ? this._iosPicker() : this._androidPicker()}
+            title={<Picker value={active_task.type} onValueChange={this._onPickerChangeVal} options={this.state.options} />}
             subtitle='TYPE'
           />
           
@@ -116,7 +111,7 @@ class ValidationActiveTask extends Component {
           loading={this.state.loading}
           buttonStyle={{backgroundColor: MAIN_COLOR}}
           title='VALIDATED'
-          onPress={() => this._updateTask()}
+          onPress={this._updateTask}
           />
         <View style={{ height: 200}}  />
         </ScrollView>
@@ -124,33 +119,11 @@ class ValidationActiveTask extends Component {
     );
   }
 
-  _iosPicker() {
-    return (
-      <PickerIOS
-        selectedValue={this.props.validation_list.active_task.type}
-        onValueChange={this._onPickerChangeVal}>
-        <PickerIOS.Item label='VALIDATION' value='validation' />
-        <PickerIOS.Item label='EXECUTIVE COMP' value='executive comp' />
-      </PickerIOS>
-    )
-  }
-
-  _androidPicker() {
-    return (
-      <Picker
-        selectedValue={this.props.validation_list.active_task.type}
-        onValueChange={this._onPickerChangeVal}>
-        <Picker.Item label='VALIDATION' value='validation' />
-        <Picker.Item label='EXECUTIVE COMP' value='executive comp' />
-      </Picker>
-    )
-  }
-
-  _onBackBtnPress() {
+  _onBackBtnPress = () => {
     this.props.setValidationActiveTask(null)
   }
 
-  _updateTask() {
+  _updateTask = () => {
     Alert.alert(
       'Task Confirmation',
       'Click ok to confirm action?',
@@ -161,28 +134,28 @@ class ValidationActiveTask extends Component {
     );
   }
 
-  _onPickerChangeVal(itemValue) {
-    this.props.setValidationActiveTask({type: itemValue})
+  _onPickerChangeVal = (type) => {
+    this.props.setValidationActiveTask({itemValue})
   }
 
-  _onUpdateTaskConfirm() {
+  _onUpdateTaskConfirm = () => {
     this.setState({loading: true});
     axios.post(
       UPDATE_VALIDATION_TASK_URL, 
       this.props.validation_list.active_task
     )
       .then(this._processUpdateTaskResponse)
-      .catch((error) => console.log(error))
+      .catch(this._errorHandler)
     ;
   }
 
-  _processUpdateTaskResponse({data}) {
-    console.log(data);
-
+  _processUpdateTaskResponse = ({data}) => {
     this.setState({loading: false});
     this.props.setValidationActiveTask(null);
     this.props.nav.navigate(HOME_NAV);
   }
+
+  _errorHandler = error => console.log(error)
 }
 
 const stateToProps = ({validation_list, nav}) => ({validation_list, nav});

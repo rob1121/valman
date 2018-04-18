@@ -16,24 +16,19 @@ import {
 } from '../constants';
 
 class Footer extends Component {
-
-  constructor() {
-    super();
-    this._logout = this._logout.bind(this);
-  }
-  _logout() {
+  _logout = () => {
     Alert.alert(
       'Logout Confirmation',
       'Are you sure you want to logout?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'OK', onPress: () => this._resetUser()},
+        { text: 'OK', onPress: this._resetUser},
       ],
       { cancelable: false }
     );
   }
 
-  _resetUser() {
+  _resetUser = () => {
     const {token} = this.props.user;
     axios.post(LOGOUT_URL, {token}).then(() => {
       AsyncStorage.multiRemove(['username','password']);

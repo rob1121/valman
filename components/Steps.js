@@ -10,16 +10,7 @@ import { DEFAULT_IMG, MAIN_COLOR, PARKING_STATUS_UPDATE_URL, WAITING_DISPATCHER,
 import CarPicker from './CarPicker';
 import CameraAction from '../components/Camera';
 
-class Steps extends Component 
-{
-  constructor() {
-    super();
-    this._updateCarList = this._updateCarList.bind(this);
-    this._errHandler = this._errHandler.bind(this);
-    this._updateStatus = this._updateStatus.bind(this);
-    this._confirm = this._confirm.bind(this);
-  }
-
+class Steps extends Component {
   state = {
     loading: false,
   }
@@ -149,7 +140,7 @@ class Steps extends Component
     );
   }
 
-  _confirm() {
+  _confirm = () => {
     Alert.alert(
       'Task Confirmation',
       'Are you sure you have completed this task?',
@@ -160,7 +151,7 @@ class Steps extends Component
     );
   }
 
-  _updateStatus() {
+  _updateStatus = () => {
     const params = {
       task: this.props.car_assign.active_task,
       user: this.props.user,
@@ -173,7 +164,7 @@ class Steps extends Component
     ;
   }
 
-  _updateCarList({ data }) {
+  _updateCarList = ({ data }) => {
     this.setState(() => ({ loading: false }));
 
     if (data.error) {
@@ -183,7 +174,7 @@ class Steps extends Component
     }
   }
 
-  _errHandler(error) {
+  _errHandler = error => {
     console.log(error);
     this.setState(() => ({ loading: false }));
   }

@@ -10,18 +10,7 @@ import CarAvailable from '../components/CarAvailable';
 import ValidationList from '../components/ValidationList';
 import Steps from '../components/Steps';
 
-class HomeScreen extends Component 
-{
-  constructor() {
-    super();
-    this._fetchCarsAssign = this._fetchCarsAssign.bind(this);
-    this._fetchCarForValidation = this._fetchCarForValidation.bind(this);
-    this._onBackPress = this._onBackPress.bind(this);
-    this._setCarForValidationList = this._setCarForValidationList.bind(this);
-    this._setCarAssigned = this._setCarAssigned.bind(this);
-    this._errHandler = this._errHandler.bind(this);
-  }
-
+class HomeScreen extends Component {
   state ={
     pageLoad: false,
   }
@@ -38,36 +27,36 @@ class HomeScreen extends Component
   componentWillUnmount() {
     this.backHandlerListener.remove();
   }
-  
-  _errHandler = error => console.log(error)
 
-  _fetchCarForValidation() {
+  _errHandler = error   => console.error(error);
+  
+  _fetchCarForValidation = () => {
     axios.post(VALIDATION_LIST_URL, {hotel_name: this.props.user.hotel_name})
       .then(this._setCarForValidationList)
       .catch(this._errHandler)
     ;
   }
 
-  _fetchCarsAssign() {
+  _fetchCarsAssign = () => {
     axios.post(CAR_ASSIGN_URL, this.props.user)
       .then(this._setCarAssigned)
       .catch(this._errHandler)
     ;
   }
-
-  _setCarAssigned({data}) {
+  
+  _setCarAssigned = ({data}) => {
     this.props.assignCars(data);
     this.setState(() => ({ pageLoad: true}));
   }
 
-  _setCarForValidationList({data}) {
+  _setCarForValidationList = ({data}) => {
     this.props.setValidationActiveTask(null);
     this.props.setValidationList(data);
     this.setState(() => ({ pageLoad: true}));
   }
 
 
-  _loader() {
+  _loader = () => {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color={MAIN_COLOR} />
@@ -75,12 +64,12 @@ class HomeScreen extends Component
     )
   }
 
-  _onBackPress() {
+  _onBackPress = () => {
     this.props.setActiveScreen(HOME_NAV);
     return true;
   }
 
-  _homePage() {
+  _homePage = () => {
     if(this.props.user.type === 'manager') {
       return (
         <View style={{ flex: 1 }}>

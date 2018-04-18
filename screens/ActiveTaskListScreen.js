@@ -10,17 +10,7 @@ import {ACTIVE_TASK_LIST_NAV, MAIN_COLOR, ACTIVE_TASK_LIST_URL} from '../constan
 import Footer from '../components/Footer';
 import ActiveTaskListSelected from '../components/ActiveTaskListSelected';
 
-class ActiveTaskListScreen extends Component 
-{
-  constructor() {
-    super();
-    this._updateActiveTaskList = this._updateActiveTaskList.bind(this);
-    this._fetchActiveTaskList = this._fetchActiveTaskList.bind(this);
-    this._listItem = this._listItem.bind(this);
-    this._selectTask = this._selectTask.bind(this);
-  }
-
-
+class ActiveTaskListScreen extends Component {
   state ={
     pageLoad: false,
     refreshing: false,
@@ -37,7 +27,9 @@ class ActiveTaskListScreen extends Component
     this.backHandlerListener.remove();
   }
 
-  _fetchActiveTaskList() {
+  _errHandler = error => console.log(error);
+
+  _fetchActiveTaskList = () => {
     this.setState(() => ({ pageLoad: true}));
     axios.post(ACTIVE_TASK_LIST_URL, {base: this.props.user.base})
       .then(this._updateActiveTaskList)
@@ -45,14 +37,12 @@ class ActiveTaskListScreen extends Component
     ;
   }
 
-  _updateActiveTaskList({data}) {
+  _updateActiveTaskList = ({data}) => {
     this.props.setActiveTaskList(null);
     this.setState(() => ({ pageLoad: false}));
   }
 
-  _errHandler = error => console.log(error);
-
-  _listItem() {
+  _listItem = () => {
     const items = map(this.props.active_task_list, (task, i) => {
       return (
         <ListItem
@@ -70,9 +60,7 @@ class ActiveTaskListScreen extends Component
     );
   }
 
-  _selectTask(task) {
-    this.setState(() => ({selectedTask: task, hasSelectedTask: true}));
-  }
+  _selectTask = task => this.setState(() => ({selectedTask: task, hasSelectedTask: true}))
 
   render() {
     if(this.state.pageLoad) {

@@ -1,18 +1,27 @@
 import React, {Component} from 'react';
-import { TouchableHighlight, Modal, Alert, Platform, PickerIOS, Picker, View, ScrollView, TextInput, BackHandler} from 'react-native';
-import {Header, Button, FormLabel, FormInput, Text, FormValidationMessage}  from 'react-native-elements';
+import { View, ScrollView, BackHandler} from 'react-native';
+import {Header, FormLabel}  from 'react-native-elements';
 import {connect} from 'react-redux';
-import {has, toUpper} from 'lodash';
-import { WIN_WIDTH, RAMP_ADD_CAR_NAV, HOME_NAV, MAIN_COLOR} from '../constants';
+import { RAMP_ADD_CAR_NAV, HOME_NAV} from '../constants';
 import {setErrors, resetCarInfo, setActiveScreen, setCarInfo} from '../actions';
 import Hotel from '../components/Hotel';
 import Transient from '../components/Transient';
 import Monthly from '../components/Monthly';
 import Footer from '../components/Footer';
+import Picker from '../components/Picker';
 
 class RampAddCar extends Component {
   state = {
-    showModal: false, 
+    options: [
+      {label:'TRANSIENT', key:'transient'},
+      {label:'HOTEL', key:'hotel'},
+      {label:'MONTHLY', key:'monthly'},
+    ],
+    ticketTypeComp: {
+      hotel: <Hotel />,
+      transient: <Transient />,
+      monthly: <Monthly />
+    }
   }
 
   componentWillMount () {
@@ -40,6 +49,7 @@ class RampAddCar extends Component {
 
   render() {
     const {car} = this.props;
+    const {options, ticketTypeComp} = this.state;
 
     return (
       <View style={{flex: 1}}>
@@ -49,73 +59,20 @@ class RampAddCar extends Component {
           centerComponent={{ text: 'TICKETING', style: { color: '#fff' } }}
         />
           <FormLabel>TICKET TYPE</FormLabel>
-
-
-
-        {Platform.OS === 'ios' 
-        ? <TouchableHighlight 
-        onPress={() => this.setState({...this.state, showModal: true})}>
-        <Text
-        textStyle={{size: 24}}>{toUpper(car.ticket_type)}(click to edit)</Text>
-           </TouchableHighlight>
-        : this._pickerAndroid()}
-
-          {car.ticket_type === 'hotel' && <Hotel />}
-          {car.ticket_type === 'transient' && <Transient />}
-          {car.ticket_type === 'monthly' && <Monthly />}
+          <View style={{marginLeft:10}}>
+          <Picker value={car.ticket_type} options={options} onValueChange={this._onTicketTypeChange} />
+          </ View>
+          {ticketTypeComp[car.ticket_type]}
         </ScrollView>
         <Footer />
-        {Platform.OS === 'ios' && this._pickerIOS()}
       </View>
     );
   }
 
-  _pickerIOS() {
-    const {car} = this.props;
-    return (
-      <Modal
-        animationType="fade"
-        transparent={false}
-        visible={this.state.showModal}
-        onRequestClose={() => this.setState(() => ({ ...this.state, showModal: false }))}>
-        <View style={{ flex: 1}}>
-          <PickerIOS
-            style={{ margin: 15 }}
-            selectedValue={car.ticket_type}
-            onValueChange={(val) => this._onTicketTypeChange(val)}>
-            <PickerIOS.Item label="TRANSIENT" value="transient" />
-            <PickerIOS.Item label="HOTEL" value="hotel" />
-            <PickerIOS.Item label="MONTHLY" value="monthly" />
-          </PickerIOS>
-
-          <Button
-            backgroundColor={MAIN_COLOR}
-            title='DONE' 
-            onPress={() => this.setState(() => ({ ...this.state, showModal: false }))}
-          />
-        </View>
-      </Modal>
-    );
-  }
-
-  _pickerAndroid() {
-    const {car} = this.props;
-    return (
-      <Picker
-        style={{ margin: 15 }}
-        selectedValue={car.ticket_type}
-        onValueChange={(val) => this._onTicketTypeChange(val)}>
-        <Picker.Item label="TRANSIENT" value="transient" />
-        <Picker.Item label="HOTEL" value="hotel" />
-        <Picker.Item label="MONTHLY" value="monthly" />
-      </Picker>
-    );
-  }
-
-  _onTicketTypeChange(category) {
+  _onTicketTypeChange = ticket_type => {
     this.props.resetCarInfo();
     this.props.setErrors({});
-    this.props.setCarInfo({ticket_type: category, uid: this.props.user.id});
+    this.props.setCarInfo({ticket_type, uid: this.props.user.id});
   }
 }
 
