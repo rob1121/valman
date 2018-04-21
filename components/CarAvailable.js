@@ -13,6 +13,11 @@ class CarAvailable extends Component {
     refreshing: false,
   }
 
+  componentWillMount() {
+    this.props.assignCars({});
+    this._fetchCarsAssign();
+  }
+
   _selectTask(task) {
     Alert.alert(
       'Task Confirmation',
@@ -24,15 +29,18 @@ class CarAvailable extends Component {
     );
   }
 
-  _fetchCarsAssign() {
+  _fetchCarsAssign = () => {
     this.setState({ ...this.state, refreshing: true});
     axios.post(CAR_ASSIGN_URL, this.props.user)
-      .then(({ data }) => {
-        this.props.assignCars(data);
-        this.setState({ ...this.state, refreshing: false});
-      }).catch(this._errHandler)
+      .then(this._updateCarList)
+      .catch(this._errHandler)
     ;
   }
+
+  _updateCarList = ({ data }) => {
+  this.props.assignCars(data);
+  this.setState({ ...this.state, refreshing: false });
+}
 
   _updateStatus = task => {
     const {user} = this.props;
@@ -76,6 +84,9 @@ class CarAvailable extends Component {
         return task.requestor.includes(toLower(selected_location));
       });
     }
+
+    if (car_assign.has_active_task) return <Steps />
+
     return (
       <View style={{flex: 1}}>
         <Header
@@ -86,7 +97,7 @@ class CarAvailable extends Component {
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
-              onRefresh={() => this._fetchCarsAssign()}
+              onRefresh={this._fetchCarsAssign}
             />
           }
         >

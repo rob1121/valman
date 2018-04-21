@@ -12,10 +12,17 @@ import {UPDATE_VALIDATION_TASK_URL, MAIN_COLOR, HOME_NAV} from '../constants';
 class ValidationActiveTask extends Component {
   state = {
     loading: false,
+    isInitialValidationCount: false,
     options: [
       { key: 'validation', label: 'VALIDATION' },
       { key: 'executive comp', label: 'EXECUTIVE COMP' }
     ],
+  }
+
+  componentWillMount() {
+    const { active_task } = this.props.validation_list;
+    const isInitialValidationCount = active_task.validation_count == -1;
+    this.setState({...this.state, isInitialValidationCount});
   }
 
   render() {
@@ -87,7 +94,13 @@ class ValidationActiveTask extends Component {
             hideChevron
             title={toUpper(active_task.car_color) || '-'}
             subtitle='CAR COLOR'
-            />
+          />
+
+          <ListItem
+            hideChevron
+              title={this._validationCountInput()}
+            subtitle='VALIDATION COUNT'
+          />
           
           <ListItem
             hideChevron
@@ -101,8 +114,8 @@ class ValidationActiveTask extends Component {
                 multiline={true}
                 numberOfLines={4}
                 underlineColorAndroid='transparent'
+                onChangeText={comment => this.props.setValidationActiveTask({ comment })}
                 style={{ padding: 5, height: 100, borderColor: 'gray', borderWidth: 1 }}
-                onChangeText={(text) => this.props.setValidationActiveTask({ comment: text })}
                 value={active_task.comment} />}
             subtitle='COMMENT'
           />
@@ -139,20 +152,48 @@ class ValidationActiveTask extends Component {
   }
 
   _onUpdateTaskConfirm = () => {
+    let { validation_count } = this.props.validation_list.active_task;
+    validation_count = parseInt(validation_count);
+    
+    const isValidValidationCount = validation_count > -1;
+    
+    if (!isValidValidationCount) {
+      alert('Invalid validation count input. Must be numeric and non negative numbers');
+      return;
+    }
+
     this.setState({loading: true});
-    axios.post(
-      UPDATE_VALIDATION_TASK_URL, 
-      this.props.validation_list.active_task
-    )
+    axios.post(UPDATE_VALIDATION_TASK_URL, this.props.validation_list.active_task)
       .then(this._processUpdateTaskResponse)
       .catch(this._errorHandler)
     ;
   }
 
   _processUpdateTaskResponse = ({data}) => {
-    this.setState({loading: false});
-    this.props.setValidationActiveTask(null);
-    this.props.nav.navigate(HOME_NAV);
+    const { nav, setValidationActiveTask } = this.props;
+
+    this.setState({ loading: false });
+    setValidationActiveTask(null);
+    nav.navigate(HOME_NAV);
+  }
+
+  _validationCountInput = () => {
+    const { active_task } = this.props.validation_list;
+    let retVal = active_task.validation_count;
+
+    if (this.state.isInitialValidationCount) {
+      retVal = (
+        <TextInput
+          keyboardType='numeric'
+          underlineColorAndroid='transparent'
+          style={{ marginLeft: 10, padding: 5, borderColor: 'gray', borderWidth: 1 }}
+          onChangeText={validation_count => this.props.setValidationActiveTask({ validation_count })}
+          value={active_task.validation_count} 
+        />
+      );
+    }
+
+    return retVal;
   }
 
   _errorHandler = error => console.log(error)

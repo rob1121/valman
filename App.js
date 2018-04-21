@@ -9,6 +9,7 @@ import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import RampAddCarScreen from './screens/RampAddCarScreen';
 import ActiveTaskListScreen from './screens/ActiveTaskListScreen';
+import ValidationHistoryListScreen from './screens/ValidationHistoryListScreen';
 
 export default class App extends Component {
 
@@ -41,7 +42,12 @@ export default class App extends Component {
 
       ActiveTaskList: {
         screen: ActiveTaskListScreen,
-        navigationOptions: { ...navOption, headerLeft: null}
+        navigationOptions: { ...navOption, headerLeft: null }
+      },
+
+      ValidationHistoryList: {
+        screen: ValidationHistoryListScreen,
+        navigationOptions: { ...navOption, headerLeft: null }
       },
     });
   

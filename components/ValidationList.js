@@ -13,7 +13,10 @@ class ValidationList extends Component {
     refreshing: false,
   }
 
-  componentWillMount = this._fetchCarForValidation
+  componentWillMount() {
+    this.props.setValidationList({});
+    this._fetchCarForValidation();
+  }
 
   render() {
     if(!isEmpty(this.props.validation_list.active_task)) {
@@ -46,8 +49,14 @@ class ValidationList extends Component {
   _generateListItem = (task, i) => {
     return (<ListItem
       key={i}
-      title={`${toUpper(task.guest_name)}: ${task.car_plate_no}`}
-      subtitle={`#${task.ticket_number} ${task.ori_checkout_date}`}
+      title={`#${task.ticket_number} ${toUpper(task.guest_name || '-')}: ${task.car_plate_no || '-'}`}
+      subtitle={
+        <View>
+          <Text style={{color: '#848484'}}>checkout date: {task.ori_checkout_date}</Text>
+          <Text style={{color: '#848484'}}>validations left: {this._validationCountDisplay(task.validation_count)}</Text>
+          
+        </View>
+      }
       leftIcon={{ name: 'directions-car' }}
       onPress={() => this._selectTask(task)}
     />);
@@ -71,6 +80,11 @@ class ValidationList extends Component {
     this.props.setValidationActiveTask(null);
     this.props.setValidationList(data);
     this.setState({ ...this.state, refreshing: false});
+  }
+
+  _validationCountDisplay = (validation_count = -1) => {
+    const INITIAL_VALIDATION_COUNT = -1;
+    return validation_count == INITIAL_VALIDATION_COUNT ? 'NOT YET VALIDATED' : validation_count;
   }
 }
 

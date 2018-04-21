@@ -23,6 +23,7 @@ export const REMOVE_IMG_URL = `${ROOT_URL}/api/remove_image.php`;
 export const SEARCH_TICKET_URL = `${ROOT_URL}/api/search_ticket.php`;
 export const SEARCH_MONTHLY_USER_URL = `${ROOT_URL}/api/search_monthly_user.php`;
 export const VALIDATION_LIST_URL = `${ROOT_URL}/api/validation_list.php`;
+export const VALIDATION_HISTORY_LIST_URL = `${ROOT_URL}/api/validation_history_list.php`;
 export const UPDATE_VALIDATION_TASK_URL = `${ROOT_URL}/api/update_validation_task.php`;
 export const ACTIVE_TASK_LIST_URL = `${ROOT_URL}/api/active_task_list.php`;
 
@@ -34,6 +35,7 @@ export const HOME_NAV = 'Home';
 export const LOGIN_NAV = 'Login';
 export const RAMP_ADD_CAR_NAV = 'RampAddCar';
 export const ACTIVE_TASK_LIST_NAV = 'ActiveTaskList';
+export const VALIDATION_HISTORY_LIST_NAV = 'ValidationHistoryList';
 
 
 export const VALET_ON_THE_WAY = 2;

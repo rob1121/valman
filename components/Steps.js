@@ -6,7 +6,7 @@ import {toUpper} from 'lodash';
 import { Header, Button, Icon, FormInput, FormLabel, List, ListItem, Text} from 'react-native-elements';
 import Barcode from 'react-native-barcode-builder';
 import { assignCars, updateActiveCar} from '../actions';
-import { DEFAULT_IMG, MAIN_COLOR, PARKING_STATUS_UPDATE_URL, WAITING_DISPATCHER, CAMERA_NAV } from '../constants';
+import { HOME_NAV, DEFAULT_IMG, MAIN_COLOR, PARKING_STATUS_UPDATE_URL, WAITING_DISPATCHER, CAMERA_NAV } from '../constants';
 import CarPicker from './CarPicker';
 import CameraAction from '../components/Camera';
 
@@ -170,7 +170,8 @@ class Steps extends Component {
     if (data.error) {
       alert(data.msg);
     } else {
-      this.props.assignCars(data.data);
+      this.props.hasActiveTask(false);
+      this.props.nav.navigate(HOME_NAV);
     }
   }
 

@@ -1,6 +1,7 @@
 import {
   ASSIGN_CARS,
-  UPDATE_ACTIVE_CAR
+  UPDATE_ACTIVE_CAR,
+  HAS_ACTIVE_CAR
 } from '../actions/types';
 
 
@@ -26,6 +27,13 @@ export default (state = INITIAL_STATE, action) => {
           ...state.active_task,
           ...action.payload,
         },
+      };
+    }
+
+    case HAS_ACTIVE_CAR: {
+      return {
+        ...state,
+        has_active_task: action.payload,
       };
     }
     default:
