@@ -3,10 +3,7 @@ import {
 } from '../actions/types';
 
 
-const INITIAL_STATE = {
-  task_list: [],
-  selected_active_task: {},
-};
+const INITIAL_STATE = {};
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {

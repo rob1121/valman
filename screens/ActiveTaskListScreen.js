@@ -12,7 +12,6 @@ import ActiveTaskListSelected from '../components/ActiveTaskListSelected';
 
 class ActiveTaskListScreen extends Component {
   state ={
-    pageLoad: false,
     refreshing: false,
     hasSelectedTask: false,
     selectedTask: {},
@@ -30,7 +29,7 @@ class ActiveTaskListScreen extends Component {
   _errHandler = error => console.log(error);
 
   _fetchActiveTaskList = () => {
-    this.setState(() => ({ pageLoad: true}));
+    this.setState(() => ({ refreshing: true}));
     axios.post(ACTIVE_TASK_LIST_URL, {base: this.props.user.base})
       .then(this._updateActiveTaskList)
       .catch(this._errHandler)
@@ -38,8 +37,8 @@ class ActiveTaskListScreen extends Component {
   }
 
   _updateActiveTaskList = ({data}) => {
-    this.props.setActiveTaskList(null);
-    this.setState(() => ({ pageLoad: false}));
+    this.props.setActiveTaskList(data);
+    this.setState(() => ({ refreshing: false}));
   }
 
   _listItem = () => {
@@ -47,8 +46,8 @@ class ActiveTaskListScreen extends Component {
       return (
         <ListItem
           key={i}
-          title={`${toUpper(task.car_make)}|${toUpper(task.car_model)}: ${task.car_plate_no} (${task.active ? 'IN PROGRESS' : ''})`}
-          subtitle={`#${task.ticket_number} ${task.ori_checkout_date}`}
+          title={`${toUpper(task.car_make)}|${toUpper(task.car_model)} ${task.car_plate_no} ${task.active ? 'IN PROGRESS' : ''}`}
+          subtitle={`#${task.ticket_number}|driver ${task.driver}`}
           leftIcon={{ name: 'directions-car' }}
           onPress={() => this._selectTask(task)}
         />
@@ -63,15 +62,6 @@ class ActiveTaskListScreen extends Component {
   _selectTask = task => this.setState(() => ({selectedTask: task, hasSelectedTask: true}))
 
   render() {
-    if(this.state.pageLoad) {
-      return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color={MAIN_COLOR} />
-          <Footer />
-        </View>
-      );
-    }
-
     if(this.state.hasSelectedTask) {
       return (
         <ActiveTaskListSelected 

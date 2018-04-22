@@ -12,7 +12,6 @@ import Steps from '../components/Steps';
 
 class HomeScreen extends Component {
   componentWillMount() {
-    this.props.setValidationList({});
     this._notificationSubscription = Notifications.addListener(this._fetchCarsAssign);
     this.backHandlerListener = BackHandler.addEventListener('hardwareBackPress', this._onBackPress);
 
