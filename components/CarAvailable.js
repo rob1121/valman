@@ -3,19 +3,40 @@ import {  View, ScrollView, Alert, RefreshControl } from 'react-native';
 import { Text, List, ListItem, Header, FormLabel } from 'react-native-elements';
 import axios from 'axios';
 import { toUpper, toLower, filter, isEmpty, map } from 'lodash';
-import {PARKING_STATUS_UPDATE_URL, CAR_ASSIGN_URL} from '../constants';
+import {LOCATION_FILTER_URL, PARKING_STATUS_UPDATE_URL, CAR_ASSIGN_URL} from '../constants';
 import {assignCars, setSelectedLocation} from '../actions';
 import { connect } from 'react-redux';
 import RampLocation from '../components/RampLocation';
+import Steps from '../components/Steps';
 
 class CarAvailable extends Component {
   state = {
+    locationList: [],
     refreshing: false,
   }
 
   componentWillMount() {
     this.props.assignCars({});
     this._fetchCarsAssign();
+    this._fetchLocations();
+  }
+
+  _fetchLocations = () => {
+    const params = { base: this.props.user.base };
+
+    axios.get(LOCATION_FILTER_URL, { params })
+      .then(this._setLocationList)
+      .catch(this._errHandler);
+  }
+
+  _setLocationList = ({ data }) => {
+    const locationList = map(data, item => ({ key: item.value, label: toUpper(item.label) }));
+    this.setState(() => ({ ...this.state, locationList }));
+
+
+    if (this.props.value == '') {
+      this.props.setSelectedLocation(data[0].value);
+    }
   }
 
   _selectTask(task) {
@@ -102,7 +123,7 @@ class CarAvailable extends Component {
           }
         >
           {this.props.user.type == 'ramp' && <FormLabel>HOTEL NAME</FormLabel>}
-          {this.props.user.type == 'ramp' && <RampLocation value={this.props.selected_location} setSelectedLocation={val => this.props.setSelectedLocation(val)} />}
+          {this.props.user.type == 'ramp' && <RampLocation value={this.props.selected_location} setSelectedLocation={val => this.props.setSelectedLocation(val)} list={this.state.locationList}/>}
           {!isEmpty(carsAssign) 
             ? this._listItem(carsAssign) 
             : <Text style={emptyTaskContainer}>No record found!.</Text>}

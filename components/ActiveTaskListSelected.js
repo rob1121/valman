@@ -1,6 +1,7 @@
 import React,{Component} from 'react' 
 import {ScrollView, View, Text} from 'react-native';
-import {List, Icon, Header} from 'react-native-elements';
+import {toUpper} from 'lodash';
+import {ListItem, List, Icon, Header} from 'react-native-elements';
 import Barcode from 'react-native-barcode-builder';
 
 export default class ActiveTaskListSelected extends Component {
@@ -27,55 +28,43 @@ export default class ActiveTaskListSelected extends Component {
           
           <ListItem
             hideChevron
-            title={active_task.guest_name || '-'}
+            title={selectedTask.guest_name || '-'}
             subtitle='GUEST NAME'
           />
           
           <ListItem
             hideChevron
-            title={active_task.room_number || '-'}
+            title={selectedTask.room_number || '-'}
             subtitle='ROOM NO.'
           />
           
           <ListItem
             hideChevron
-            title={active_task.ori_checkin_date}
-            subtitle='CHECKIN DATE'
-          />
-          
-          <ListItem
-            hideChevron
-              title={active_task.ori_checkout_date || '-'}
-            subtitle='CHECKOUT DATE'
-          />
-          
-          <ListItem
-            hideChevron
-            title={active_task.driver || '-'}
+            title={selectedTask.driver || '-'}
             subtitle='DRIVER'
           />
 
           <ListItem
             hideChevron
-            title={toUpper(active_task.car_make) || '-'}
+            title={toUpper(selectedTask.car_make) || '-'}
             subtitle='CAR MAKE'
           />
 
           <ListItem
             hideChevron
-            title={toUpper(active_task.car_model) || '-'}
+            title={toUpper(selectedTask.car_model) || '-'}
             subtitle='CAR MODEL'
           />
 
           <ListItem
             hideChevron
-            title={toUpper(active_task.car_plate_no) || '-'}
+            title={toUpper(selectedTask.car_plate_no) || '-'}
             subtitle='CAR PLATE NO'
           />
 
           <ListItem
             hideChevron
-            title={toUpper(active_task.car_color) || '-'}
+            title={toUpper(selectedTask.car_color) || '-'}
             subtitle='CAR COLOR'
           />
           </List>

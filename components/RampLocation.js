@@ -4,43 +4,15 @@ import axios from 'axios';
 import { map, toUpper } from 'lodash';
 import Picker from './Picker';
 import { connect } from 'react-redux';
-import { LOCATION_FILTER_URL } from '../constants';
 
-class LocationFilter extends Component  {
+class RampLocation extends Component  {
 
   state = {
-    list: [],
     visible: false,
   }
-
-  componentDidMount() {
-    this._fetchLocations();
-  } 
-
-  _fetchLocations = () => {
-    const params = {base: this.props.user.base};
-
-    axios.get(LOCATION_FILTER_URL, {params})
-      .then(this._setList)
-      .catch(this._errHandler);
-  }
-
-  _setList = ({ data }) => {
-
-    const list = map(data, item => ({key: item.value, label: toUpper(item.label) }));
-    this.setState(() => ({...this.state, list}));
-
-
-    if(this.props.value == ''){
-      this.props.setSelectedLocation(data[0].value);}
-  }
-
-  _errHandler = error   => console.error(error);
-
-  render() {
-      
-    const { visible, list } = this.state;
-    const {value, setSelectedLocation} = this.props;
+  render = () => {
+    const { visible } = this.state;
+    const {value, setSelectedLocation, list} = this.props;
 
     return (
       <View style={{marginLeft: 10}}>
@@ -52,4 +24,4 @@ class LocationFilter extends Component  {
 
 const mapStateToProps = ({user}) => ({user});
 
-export default connect(mapStateToProps)(LocationFilter);
+export default connect(mapStateToProps)(RampLocation);

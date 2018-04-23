@@ -5,7 +5,7 @@ import axios from 'axios';
 import {toUpper} from 'lodash';
 import { Header, Button, Icon, FormInput, FormLabel, List, ListItem, Text} from 'react-native-elements';
 import Barcode from 'react-native-barcode-builder';
-import { assignCars, updateActiveCar} from '../actions';
+import { hasActiveCar, assignCars, updateActiveCar} from '../actions';
 import { HOME_NAV, DEFAULT_IMG, MAIN_COLOR, PARKING_STATUS_UPDATE_URL, WAITING_DISPATCHER, CAMERA_NAV } from '../constants';
 import CarPicker from './CarPicker';
 import CameraAction from '../components/Camera';
@@ -170,7 +170,7 @@ class Steps extends Component {
     if (data.error) {
       alert(data.msg);
     } else {
-      this.props.hasActiveTask(false);
+      this.props.hasActiveCar(false);
       this.props.nav.navigate(HOME_NAV);
     }
   }
@@ -181,7 +181,5 @@ class Steps extends Component {
   }
 }
 
-
 const mapStateToProps = ({ user, car_assign, nav }) => ({ user, car_assign, nav });
-
-export default connect(mapStateToProps, { assignCars, updateActiveCar})(Steps);
+export default connect(mapStateToProps, { hasActiveCar, assignCars, updateActiveCar})(Steps);
