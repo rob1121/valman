@@ -6,7 +6,7 @@ import {toUpper} from 'lodash';
 import { Header, Button, Icon, FormInput, FormLabel, List, ListItem, Text} from 'react-native-elements';
 import Barcode from 'react-native-barcode-builder';
 import { hasActiveCar, assignCars, updateActiveCar} from '../actions';
-import { HOME_NAV, DEFAULT_IMG, MAIN_COLOR, PARKING_STATUS_UPDATE_URL, WAITING_DISPATCHER, CAMERA_NAV } from '../constants';
+import { CAR_ASSIGN_URL, HOME_NAV, DEFAULT_IMG, MAIN_COLOR, PARKING_STATUS_UPDATE_URL, WAITING_DISPATCHER, CAMERA_NAV } from '../constants';
 import CarPicker from './CarPicker';
 import CameraAction from '../components/Camera';
 
@@ -28,7 +28,7 @@ class Steps extends Component {
 
           {active_task.ticketno != '' && <Text style={{ textAlign: 'center' }} h5>{active_task.ticketno}</Text>}
           <View style={{ flex: 1 }}>
-            <Text style={{textAlign: 'center', marginTop: 50, marginBottom: 10 }} h5> Waiting for Dispatcher Acknowledgement. </Text>
+            <Text style={{textAlign: 'center', marginTop: 50, marginBottom: 10 }} h5> {active_task.trackingid}Waiting for Dispatcher Acknowledgement. </Text>
             <Text style={{textAlign: 'center', marginTop: 10, marginBottom: 10 }}> To complete this please have your dispatcher acknowlege your arrival at the garage </Text>
           </View>
         </View>
@@ -166,13 +166,15 @@ class Steps extends Component {
 
   _updateCarList = ({ data }) => {
     this.setState(() => ({ loading: false }));
-
-    if (data.error) {
-      alert(data.msg);
-    } else {
-      this.props.hasActiveCar(false);
-      this.props.nav.navigate(HOME_NAV);
-    }
+    
+    // if (data.error) {
+    //   alert(data.msg);
+    //   return;
+    // }
+    console.log(data);
+    // this.props.updateActiveCar(data.data.active_task);
+    // this.props.hasActiveCar(data.data.has_active_task);
+    // this.props.assignCars(data.data.task_list);
   }
 
   _errHandler = error => {
