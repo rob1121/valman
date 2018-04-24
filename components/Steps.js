@@ -167,14 +167,13 @@ class Steps extends Component {
   _updateCarList = ({ data }) => {
     this.setState(() => ({ loading: false }));
     
-    // if (data.error) {
-    //   alert(data.msg);
-    //   return;
-    // }
-    console.log(data);
-    // this.props.updateActiveCar(data.data.active_task);
-    // this.props.hasActiveCar(data.data.has_active_task);
-    // this.props.assignCars(data.data.task_list);
+    if (data.error) {
+      alert(data.msg);
+      return;
+    }
+    this.props.updateActiveCar(data.data.active_task);
+    this.props.hasActiveCar(data.data.has_active_task);
+    this.props.assignCars(data.data.task_list);
   }
 
   _errHandler = error => {

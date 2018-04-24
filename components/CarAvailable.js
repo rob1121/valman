@@ -1,42 +1,26 @@
 import React, { Component } from 'react';
+import { Notifications } from 'expo';
 import {  View, ScrollView, Alert, RefreshControl } from 'react-native';
 import { Text, List, ListItem, Header, FormLabel } from 'react-native-elements';
 import axios from 'axios';
 import { toUpper, toLower, filter, isEmpty, map } from 'lodash';
 import {LOCATION_FILTER_URL, PARKING_STATUS_UPDATE_URL, CAR_ASSIGN_URL} from '../constants';
-import {assignCars, setSelectedLocation} from '../actions';
+import {assignCars} from '../actions';
 import { connect } from 'react-redux';
 import RampLocation from '../components/RampLocation';
 import Steps from '../components/Steps';
 
 class CarAvailable extends Component {
   state = {
-    locationList: [],
     refreshing: false,
+    pageLoad: false,
   }
 
   componentWillMount() {
+    this.setState({ ...this.state, pageLoad: false});
+    this._notificationSubscription = Notifications.addListener(this._fetchCarsAssign);
     this.props.assignCars({});
     this._fetchCarsAssign();
-    this._fetchLocations();
-  }
-
-  _fetchLocations = () => {
-    const params = { base: this.props.user.base };
-
-    axios.get(LOCATION_FILTER_URL, { params })
-      .then(this._setLocationList)
-      .catch(this._errHandler);
-  }
-
-  _setLocationList = ({ data }) => {
-    const locationList = map(data, item => ({ key: item.value, label: toUpper(item.label) }));
-    this.setState(() => ({ ...this.state, locationList }));
-
-
-    if (this.props.value == '') {
-      this.props.setSelectedLocation(data[0].value);
-    }
   }
 
   _selectTask(task) {
@@ -60,10 +44,11 @@ class CarAvailable extends Component {
 
   _updateCarList = ({ data }) => {
   this.props.assignCars(data);
-  this.setState({ ...this.state, refreshing: false });
+    this.setState({ ...this.state, refreshing: false, pageLoad: true });
 }
 
   _updateStatus = task => {
+    this.setState({ ...this.state, refreshing: true });
     const {user} = this.props;
     axios.post(PARKING_STATUS_UPDATE_URL, {task, user})
       .then(this._setCars)
@@ -71,8 +56,9 @@ class CarAvailable extends Component {
     ;
   }
 
-  _setCars = ({data}) => {
+  _setCars = ({ data }) => {
     this.props.assignCars(data.data);
+    this.setState({ ...this.state, refreshing: false });
   }
   
   _errHandler = error   => console.error(error);
@@ -106,30 +92,36 @@ class CarAvailable extends Component {
       });
     }
 
-    if (car_assign.has_active_task) return <Steps />
+    if (!this.state.pageLoad) return <Text style={emptyTaskContainer}>Loading...</Text>
 
-    return (
-      <View style={{flex: 1}}>
-        <Header
-          centerComponent={{ text: 'TASK LIST', style: { color: '#fff' } }}
-        />
-        <ScrollView 
-          style={{marginTop: 20, marginBottom: 50}}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._fetchCarsAssign}
-            />
-          }
-        >
-          {this.props.user.type == 'ramp' && <FormLabel>HOTEL NAME</FormLabel>}
-          {this.props.user.type == 'ramp' && <RampLocation value={this.props.selected_location} setSelectedLocation={val => this.props.setSelectedLocation(val)} list={this.state.locationList}/>}
-          {!isEmpty(carsAssign) 
-            ? this._listItem(carsAssign) 
-            : <Text style={emptyTaskContainer}>No record found!.</Text>}
-        </ScrollView>
-      </View>
-    );
+    if (car_assign.has_active_task) {
+      return <Steps />;
+    }
+    if (!car_assign.has_active_task && isEmpty(car_assign.active_task)) {
+      console.log(!car_assign.has_active_task, isEmpty(car_assign.active_task), (!car_assign.has_active_task && isEmpty(car_assign.active_task)))
+      return (
+        <View style={{ flex: 1 }}>
+          <Header
+            centerComponent={{ text: 'TASK LIST', style: { color: '#fff' } }}
+          />
+          <ScrollView
+            style={{ marginTop: 20, marginBottom: 50 }}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._fetchCarsAssign}
+              />
+            }
+          >
+            {this.props.user.type == 'ramp' && <FormLabel>HOTEL NAME{this.props.selected_location}</FormLabel>}
+            {this.props.user.type == 'ramp' && <RampLocation />}
+            {!isEmpty(carsAssign)
+              ? this._listItem(carsAssign)
+              : <Text style={emptyTaskContainer}>No record found!.</Text>}
+          </ScrollView>
+        </View>
+      );
+    }
   }
 }
 
@@ -148,4 +140,4 @@ const styles = {
 
 const mapStateToProps = ({ user, nav, car_assign, selected_location }) => ({ user, nav, car_assign, selected_location });
 
-export default connect(mapStateToProps, {assignCars, setSelectedLocation})(CarAvailable)
+export default connect(mapStateToProps, {assignCars})(CarAvailable)

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, BackHandler, AsyncStorage, ActivityIndicator } from 'react-native';
 import {connect} from 'react-redux';
 import axios from 'axios';
-import {Notifications} from 'expo';
 import { setActiveScreen } from '../actions';
 import {HOME_NAV, MAIN_COLOR } from '../constants';
 import Footer from '../components/Footer';
@@ -12,7 +11,6 @@ import Steps from '../components/Steps';
 
 class HomeScreen extends Component {
   componentWillMount() {
-    this._notificationSubscription = Notifications.addListener(this._fetchCarsAssign);
     this.backHandlerListener = BackHandler.addEventListener('hardwareBackPress', this._onBackPress);
 
     this.props.setActiveScreen(HOME_NAV);
