@@ -38,7 +38,7 @@ class RampLocation extends Component  {
   
   render = () => {
     const { visible, list } = this.state;
-    const { value, setSelectedLocation, selected_location} = this.props;
+    const { setSelectedLocation, selected_location} = this.props;
 
     return (
       <View style={{marginLeft: 10}}>
