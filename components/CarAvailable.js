@@ -90,14 +90,24 @@ class CarAvailable extends Component {
   render() {
     const { emptyTaskContainer} = styles;
     const { car_assign, nav, user, selected_location} = this.props;
-    
-    if(car_assign.task_list == undefined || this.state.pageLoading) return <Text style={emptyTaskContainer}>Loading...</Text>;
+    const header = (
+      <Header
+        centerComponent={{ text: 'TASK LIST FOR YOU', style: { color: '#fff' } }}
+      />
+    );
+
+    if(car_assign.task_list == undefined || this.state.pageLoading) {
+      return (
+        <View style={{ flex: 1 }}>
+            {header}
+            <Text style={emptyTaskContainer}>Loading...</Text>
+        </View>
+      );
+    }
 
     return car_assign.has_active_task ? <Steps /> : (
       <View style={{ flex: 1 }}>
-      <Header
-        centerComponent={{ text: 'TASK LIST', style: { color: '#fff' } }}
-      />
+        {header}
         {this._carListComp()}
       </View>
     );

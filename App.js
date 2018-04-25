@@ -8,7 +8,7 @@ import {MAIN_COLOR, RAMP_ADD_CAR_NAV} from './constants';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import RampAddCarScreen from './screens/RampAddCarScreen';
-import ActiveTaskListScreen from './screens/ActiveTaskListScreen';
+import CarAvailableScreen from './screens/CarAvailableScreen';
 import ValidationHistoryListScreen from './screens/ValidationHistoryListScreen';
 
 export default class App extends Component {
@@ -40,8 +40,8 @@ export default class App extends Component {
         navigationOptions: { ...navOption, headerLeft: null}
       },
 
-      ActiveTaskList: {
-        screen: ActiveTaskListScreen,
+      CarAvailable: {
+        screen: CarAvailableScreen,
         navigationOptions: { ...navOption, headerLeft: null }
       },
 

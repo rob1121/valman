@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import {ScrollView, RefreshControl, View, BackHandler, Text, AsyncStorage, ActivityIndicator } from 'react-native';
-import {Header, List, ListItem} from 'react-native-elements';
+import {FormLabel, Header, List, ListItem} from 'react-native-elements';
 import {connect} from 'react-redux';
-import {toUpper, map} from 'lodash';
+import {isEmpty, toUpper, map, filter, toLower} from 'lodash';
 import axios from 'axios';
 import {Notifications} from 'expo';
 import {setActiveScreen, setActiveTaskList} from '../actions';
-import {ACTIVE_TASK_LIST_NAV, MAIN_COLOR, ACTIVE_TASK_LIST_URL} from '../constants';
-import Footer from '../components/Footer';
-import ActiveTaskListSelected from '../components/ActiveTaskListSelected';
+import {HOME_NAV, MAIN_COLOR, ACTIVE_TASK_LIST_URL} from '../constants';
+import RampLocation from './RampLocation';
+import Footer from './Footer';
+import ActiveTaskListSelected from './ActiveTaskListSelected';
 
-class ActiveTaskListScreen extends Component {
+class ActiveTaskList extends Component {
   state ={
     refreshing: false,
     hasSelectedTask: false,
@@ -19,7 +20,7 @@ class ActiveTaskListScreen extends Component {
 
   componentWillMount() {
     this._fetchActiveTaskList();
-    this.props.setActiveScreen(ACTIVE_TASK_LIST_NAV);
+    this.props.setActiveScreen(HOME_NAV);
   }
 
   componentWillUnmount() {
@@ -42,7 +43,15 @@ class ActiveTaskListScreen extends Component {
   }
 
   _listItem = () => {
-    const items = map(this.props.active_task_list, (task, i) => {
+    const {selected_location, active_task_list} = this.props;
+    const activeTasks = filter(active_task_list, (task) => {
+        task.requestor = toLower(task.requestor || '');
+        return task.requestor.includes(toLower(selected_location));
+    });
+
+    if(isEmpty(activeTasks)) return <Text  style={{textAlignVertical: "center",textAlign: "center"}}>No Active task found!</Text>
+
+    const items = map(activeTasks, (task, i) => {
       return (
         <ListItem
           key={i}
@@ -74,8 +83,11 @@ class ActiveTaskListScreen extends Component {
     return (
       <View style={{flex: 1}}>
         <Header
-          centerComponent={{ text: 'TASK LIST', style: { color: '#fff' } }}
+          centerComponent={{ text: 'ACTIVE TICKETS', style: { color: '#fff' } }}
         />
+        
+        <FormLabel>HOTEL NAME</FormLabel>
+        <RampLocation />
         <ScrollView 
           style={{marginTop: 20, marginBottom: 50}}
           refreshControl={
@@ -103,6 +115,6 @@ const styles = {
 };
 
 
-const mapStateToProps = ({ user, active_task_list }) => ({ user, active_task_list });
+const mapStateToProps = ({ user, active_task_list, selected_location }) => ({ user, active_task_list, selected_location });
 
-export default connect(mapStateToProps, { setActiveScreen, setActiveTaskList })(ActiveTaskListScreen);
+export default connect(mapStateToProps, { setActiveScreen, setActiveTaskList })(ActiveTaskList);

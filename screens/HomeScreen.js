@@ -5,7 +5,7 @@ import axios from 'axios';
 import { setActiveScreen } from '../actions';
 import {HOME_NAV, MAIN_COLOR } from '../constants';
 import Footer from '../components/Footer';
-import CarAvailable from '../components/CarAvailable';
+import ActiveTaskList from '../components/ActiveTaskList';
 import ValidationList from '../components/ValidationList';
 import Steps from '../components/Steps';
 
@@ -28,7 +28,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        {this.props.user.type === 'manager' ? <ValidationList /> : <CarAvailable />}     
+        {this.props.user.type === 'manager' ? <ValidationList /> : <ActiveTaskList />}     
         <Footer />
       </View>
     );

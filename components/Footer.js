@@ -11,7 +11,7 @@ import {
   HOME_NAV,
   LOGIN_NAV,
   RAMP_ADD_CAR_NAV,
-  ACTIVE_TASK_LIST_NAV,
+  CAR_AVAILABLE_LIST_NAV,
   VALIDATION_HISTORY_LIST_NAV,
   LOGOUT_URL
 } from '../constants';
@@ -75,8 +75,8 @@ class Footer extends Component {
           ? <Icon
             name='tasklist'
             type='octicon'
-            color={this._screenMenuColor(ACTIVE_TASK_LIST_NAV)}
-            onPress={this._screenMenuOnPress(ACTIVE_TASK_LIST_NAV)}
+            color={this._screenMenuColor(CAR_AVAILABLE_LIST_NAV)}
+            onPress={this._screenMenuOnPress(CAR_AVAILABLE_LIST_NAV)}
           /> : null
         }
 

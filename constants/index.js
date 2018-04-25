@@ -34,7 +34,7 @@ export const DISABLE_SCREEN_COLOR = '#cccccc';
 export const HOME_NAV = 'Home';
 export const LOGIN_NAV = 'Login';
 export const RAMP_ADD_CAR_NAV = 'RampAddCar';
-export const ACTIVE_TASK_LIST_NAV = 'ActiveTaskList';
+export const CAR_AVAILABLE_LIST_NAV = 'CarAvailable';
 export const VALIDATION_HISTORY_LIST_NAV = 'ValidationHistoryList';
 
 
