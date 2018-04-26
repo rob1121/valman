@@ -7,7 +7,6 @@ import { toUpper, toLower, filter, isEmpty, map } from 'lodash';
 import {LOCATION_FILTER_URL, PARKING_STATUS_UPDATE_URL, CAR_ASSIGN_URL} from '../constants';
 import {assignCars, updateActiveCar, hasActiveCar} from '../actions';
 import { connect } from 'react-redux';
-import RampLocation from '../components/RampLocation';
 import Steps from '../components/Steps';
 import Footer from '../components/Footer';
 
@@ -117,14 +116,7 @@ class CarAvailable extends Component {
 
   _carListComp() {
     const { emptyTaskContainer} = styles;
-    const { car_assign, user, selected_location} = this.props;
-    let carsAssign = car_assign.task_list;
-    if(this.props.user.type == 'ramp') {
-      carsAssign = filter(car_assign.task_list, (task) => {
-        task.requestor = toLower(task.requestor || '');
-        return task.requestor.includes(toLower(selected_location));
-      });
-    }
+    const { car_assign: { task_list }, user} = this.props;
 
     return (
       <ScrollView
@@ -136,10 +128,8 @@ class CarAvailable extends Component {
           />
         }
       >
-        {this.props.user.type == 'ramp' && <FormLabel>HOTEL NAME</FormLabel>}
-        {this.props.user.type == 'ramp' && <RampLocation />}
-        {!isEmpty(carsAssign)
-          ? this._listItem(carsAssign)
+        {!isEmpty(task_list)
+          ? this._listItem(task_list)
           : <Text style={emptyTaskContainer}>No record found!.</Text>}
       </ScrollView>
     );
@@ -159,6 +149,6 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ user, nav, car_assign, selected_location }) => ({ user, nav, car_assign, selected_location });
+const mapStateToProps = ({ user, nav, car_assign }) => ({ user, nav, car_assign });
 
 export default connect(mapStateToProps, {assignCars, updateActiveCar, hasActiveCar})(CarAvailable)

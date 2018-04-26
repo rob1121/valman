@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import {ScrollView, RefreshControl, View, BackHandler, Text, AsyncStorage, ActivityIndicator } from 'react-native';
-import {FormLabel, Header, List, ListItem} from 'react-native-elements';
-import {connect} from 'react-redux';
-import {isEmpty, toUpper, map, filter, toLower} from 'lodash';
+import { ScrollView, RefreshControl, View, BackHandler, Text, AsyncStorage, ActivityIndicator } from 'react-native';
+import { FormLabel, Header, List, ListItem } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { isEmpty, toUpper, map, filter, toLower } from 'lodash';
 import axios from 'axios';
-import {setActiveScreen, setActiveTaskList} from '../actions';
-import {HOME_NAV, MAIN_COLOR, ACTIVE_TASK_LIST_URL} from '../constants';
+import { Notifications } from 'expo';
+import { setActiveScreen, setActiveTaskList } from '../actions';
+import { HOME_NAV, MAIN_COLOR, ACTIVE_TASK_LIST_URL } from '../constants';
+import RampLocation from './RampLocation';
 import Footer from './Footer';
 import ActiveTaskListSelected from './ActiveTaskListSelected';
 
 class ActiveTaskList extends Component {
-  state ={
+  state = {
     refreshing: false,
     hasSelectedTask: false,
     selectedTask: {},
@@ -28,24 +30,28 @@ class ActiveTaskList extends Component {
   _errHandler = error => console.log(error);
 
   _fetchActiveTaskList = () => {
-    this.setState(() => ({ refreshing: true}));
-    axios.post(ACTIVE_TASK_LIST_URL, {base: this.props.user.base})
+    this.setState(() => ({ refreshing: true }));
+    axios.post(ACTIVE_TASK_LIST_URL, { base: this.props.user.base })
       .then(this._updateActiveTaskList)
       .catch(this._errHandler)
-    ;
+      ;
   }
 
-  _updateActiveTaskList = ({data}) => {
+  _updateActiveTaskList = ({ data }) => {
     this.props.setActiveTaskList(data);
-    this.setState(() => ({ refreshing: false}));
+    this.setState(() => ({ refreshing: false }));
   }
 
   _listItem = () => {
-    const {active_task_list} = this.props;
+    const { selected_location, active_task_list } = this.props;
+    const activeTasks = filter(active_task_list, (task) => {
+      task.requestor = toLower(task.requestor || '');
+      return task.requestor.includes(toLower(selected_location));
+    });
 
-    if(isEmpty(active_task_list)) return <Text  style={{textAlignVertical: "center",textAlign: "center"}}>No Active task found!</Text>
+    if (isEmpty(activeTasks)) return <Text style={{ textAlignVertical: "center", textAlign: "center" }}>No Active task found!</Text>
 
-    const items = map(active_task_list, (task, i) => {
+    const items = map(activeTasks, (task, i) => {
       return (
         <ListItem
           key={i}
@@ -62,25 +68,28 @@ class ActiveTaskList extends Component {
     );
   }
 
-  _selectTask = task => this.setState(() => ({selectedTask: task, hasSelectedTask: true}))
+  _selectTask = task => this.setState(() => ({ selectedTask: task, hasSelectedTask: true }))
 
   render() {
-    if(this.state.hasSelectedTask) {
+    if (this.state.hasSelectedTask) {
       return (
-        <ActiveTaskListSelected 
-          onBackPress={() => this.setState(() => ({selectedTask: {}, hasSelectedTask: false}))}
-          selectedTask={this.state.selectedTask} 
+        <ActiveTaskListSelected
+          onBackPress={() => this.setState(() => ({ selectedTask: {}, hasSelectedTask: false }))}
+          selectedTask={this.state.selectedTask}
         />
       )
     }
-   
+
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Header
           centerComponent={{ text: 'ACTIVE TICKETS', style: { color: '#fff' } }}
         />
-        <ScrollView 
-          style={{marginTop: 20, marginBottom: 50}}
+
+        <FormLabel>HOTEL NAME</FormLabel>
+        <RampLocation />
+        <ScrollView
+          style={{ marginTop: 20, marginBottom: 50 }}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
@@ -98,14 +107,14 @@ class ActiveTaskList extends Component {
 
 
 const styles = {
-  emptyTaskContainer: { 
-    marginTop: 20, 
-    color: '#000', 
-    textAlign: 'center' 
+  emptyTaskContainer: {
+    marginTop: 20,
+    color: '#000',
+    textAlign: 'center'
   },
 };
 
 
-const mapStateToProps = ({ user, active_task_list }) => ({ user, active_task_list });
+const mapStateToProps = ({ user, active_task_list, selected_location }) => ({ user, active_task_list, selected_location });
 
 export default connect(mapStateToProps, { setActiveScreen, setActiveTaskList })(ActiveTaskList);
