@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 import ActiveTaskList from '../components/ActiveTaskList';
 import ValidationList from '../components/ValidationList';
 import Steps from '../components/Steps';
+import CarAvailable from '../components/CarAvailable';
 
 class HomeScreen extends Component {
   componentWillMount() {
@@ -26,6 +27,8 @@ class HomeScreen extends Component {
   }
 
   render() {
+    if (this.props.user.type === 'driver') return <CarAvailable />
+
     return (
       <View style={{ flex: 1 }}>
         {this.props.user.type === 'manager' ? <ValidationList /> : <ActiveTaskList />}     
@@ -35,6 +38,6 @@ class HomeScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapStateToProps = ({ user, nav }) => ({ user, nav });
 
 export default connect(mapStateToProps, { setActiveScreen })(HomeScreen);

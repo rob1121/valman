@@ -9,6 +9,7 @@ import {assignCars, updateActiveCar, hasActiveCar} from '../actions';
 import { connect } from 'react-redux';
 import RampLocation from '../components/RampLocation';
 import Steps from '../components/Steps';
+import Footer from '../components/Footer';
 
 class CarAvailable extends Component {
   state = {
@@ -109,6 +110,7 @@ class CarAvailable extends Component {
       <View style={{ flex: 1 }}>
         {header}
         {this._carListComp()}
+        <Footer />
       </View>
     );
   }

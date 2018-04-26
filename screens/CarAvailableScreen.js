@@ -4,7 +4,6 @@ import CarAvailable from '../components/CarAvailable';
 import {CAR_AVAILABLE_LIST_NAV} from '../constants';
 import {setActiveScreen} from '../actions';
 import {connect} from 'react-redux';
-import Footer from '../components/Footer';
 
 class CarAvailableScreen extends Component {
   componentWillMount() {
@@ -14,7 +13,6 @@ class CarAvailableScreen extends Component {
     return (
       <View style={{ flex: 1 }}>
         <CarAvailable />
-        <Footer />
       </View>
       );
   }
