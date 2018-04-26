@@ -147,9 +147,7 @@ class ValidationActiveTask extends Component {
     );
   }
 
-  _onPickerChangeVal = (type) => {
-    this.props.setValidationActiveTask({itemValue})
-  }
+  _onPickerChangeVal = type => this.props.setValidationActiveTask({type})
 
   _onUpdateTaskConfirm = () => {
     let { validation_count } = this.props.validation_list.active_task;
