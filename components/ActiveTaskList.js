@@ -4,10 +4,8 @@ import {FormLabel, Header, List, ListItem} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {isEmpty, toUpper, map, filter, toLower} from 'lodash';
 import axios from 'axios';
-import {Notifications} from 'expo';
 import {setActiveScreen, setActiveTaskList} from '../actions';
 import {HOME_NAV, MAIN_COLOR, ACTIVE_TASK_LIST_URL} from '../constants';
-import RampLocation from './RampLocation';
 import Footer from './Footer';
 import ActiveTaskListSelected from './ActiveTaskListSelected';
 
@@ -43,15 +41,11 @@ class ActiveTaskList extends Component {
   }
 
   _listItem = () => {
-    const {selected_location, active_task_list} = this.props;
-    const activeTasks = filter(active_task_list, (task) => {
-        task.requestor = toLower(task.requestor || '');
-        return task.requestor.includes(toLower(selected_location));
-    });
+    const {active_task_list} = this.props;
 
-    if(isEmpty(activeTasks)) return <Text  style={{textAlignVertical: "center",textAlign: "center"}}>No Active task found!</Text>
+    if(isEmpty(active_task_list)) return <Text  style={{textAlignVertical: "center",textAlign: "center"}}>No Active task found!</Text>
 
-    const items = map(activeTasks, (task, i) => {
+    const items = map(active_task_list, (task, i) => {
       return (
         <ListItem
           key={i}
@@ -85,9 +79,6 @@ class ActiveTaskList extends Component {
         <Header
           centerComponent={{ text: 'ACTIVE TICKETS', style: { color: '#fff' } }}
         />
-        
-        <FormLabel>HOTEL NAME</FormLabel>
-        <RampLocation />
         <ScrollView 
           style={{marginTop: 20, marginBottom: 50}}
           refreshControl={
@@ -115,6 +106,6 @@ const styles = {
 };
 
 
-const mapStateToProps = ({ user, active_task_list, selected_location }) => ({ user, active_task_list, selected_location });
+const mapStateToProps = ({ user, active_task_list }) => ({ user, active_task_list });
 
 export default connect(mapStateToProps, { setActiveScreen, setActiveTaskList })(ActiveTaskList);
