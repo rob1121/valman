@@ -55,8 +55,13 @@ class ActiveTaskList extends Component {
       return (
         <ListItem
           key={i}
-          title={`${toUpper(task.car_make)}|${toUpper(task.car_model)} ${task.car_plate_no} ${task.active ? 'IN PROGRESS' : ''}`}
-          subtitle={`#${task.ticket_number}|driver ${task.driver}`}
+          title={`${toUpper(task.car_make || '-')}|${toUpper(task.car_model || '-')} ${task.car_plate_no || '-'} ${task.active ? 'IN PROGRESS' : ''}`}
+          subtitle={
+            <View>
+              <Text>#{task.ticket_number} || driver: {task.driver || '-'}</Text>
+              <Text>task: {task.opt || '-'} || status: {task.status_title || '-'}</Text>
+            </View>
+          }
           leftIcon={{ name: 'directions-car' }}
           onPress={() => this._selectTask(task)}
         />

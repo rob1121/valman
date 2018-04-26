@@ -3,7 +3,7 @@ import {TextInput, Alert, View, ScrollView, Text} from 'react-native';
 import {Button, Header, List, ListItem, Icon} from 'react-native-elements';
 import axios from 'axios';
 import {connect} from 'react-redux';
-import {toUpper} from 'lodash';
+import {toUpper, range, map} from 'lodash';
 import Barcode from 'react-native-barcode-builder';
 import Picker from './Picker'
 import {setValidationActiveTask} from '../actions';
@@ -17,12 +17,26 @@ class ValidationActiveTask extends Component {
       { key: 'validation', label: 'VALIDATION' },
       { key: 'executive comp', label: 'EXECUTIVE COMP' }
     ],
+    valCountsOptions: [
+      { key: 1, label: 1 }
+    ]
   }
 
   componentWillMount() {
     const { active_task } = this.props.validation_list;
     const isInitialValidationCount = active_task.validation_count == -1;
-    this.setState({...this.state, isInitialValidationCount});
+    const MIN_COUNT = 1;
+    const MAX_COUNT = 20;
+    const counts = range(MIN_COUNT,MAX_COUNT+1);
+    const valCountsOptions = map(counts, (count) => {
+      return { key: count, label: count };
+    });
+
+    this.setState({
+      ...this.state, 
+      isInitialValidationCount,
+      valCountsOptions
+    });
   }
 
   render() {
@@ -98,7 +112,7 @@ class ValidationActiveTask extends Component {
 
           <ListItem
             hideChevron
-              title={this._validationCountInput()}
+              title={<Picker value={active_task.validation_count} onValueChange={this._onValCountChange} options={this.state.valCountsOptions} />}
             subtitle='VALIDATION COUNT'
           />
           
@@ -175,24 +189,7 @@ class ValidationActiveTask extends Component {
     nav.navigate(HOME_NAV);
   }
 
-  _validationCountInput = () => {
-    const { active_task } = this.props.validation_list;
-    let retVal = active_task.validation_count;
-
-    if (this.state.isInitialValidationCount) {
-      retVal = (
-        <TextInput
-          keyboardType='numeric'
-          underlineColorAndroid='transparent'
-          style={{ marginLeft: 10, padding: 5, borderColor: 'gray', borderWidth: 1 }}
-          onChangeText={validation_count => this.props.setValidationActiveTask({ validation_count })}
-          value={active_task.validation_count} 
-        />
-      );
-    }
-
-    return retVal;
-  }
+  _onValCountChange = validation_count => this.props.setValidationActiveTask({ validation_count })
 
   _errorHandler = error => console.log(error)
 }
