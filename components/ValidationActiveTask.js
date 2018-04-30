@@ -175,7 +175,7 @@ class ValidationActiveTask extends Component {
     }
 
     this.setState({loading: true});
-    axios.post(UPDATE_VALIDATION_TASK_URL, this.props.validation_list.active_task)
+    axios.post(UPDATE_VALIDATION_TASK_URL, { ...this.props.validation_list.active_task, manager: this.props.user.name})
       .then(this._processUpdateTaskResponse)
       .catch(this._errorHandler)
     ;
@@ -194,6 +194,6 @@ class ValidationActiveTask extends Component {
   _errorHandler = error => console.log(error)
 }
 
-const stateToProps = ({validation_list, nav}) => ({validation_list, nav});
+const stateToProps = ({user, validation_list, nav}) => ({user, validation_list, nav});
 
 export default connect(stateToProps, {setValidationActiveTask})(ValidationActiveTask);
