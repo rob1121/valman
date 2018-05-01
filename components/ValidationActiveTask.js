@@ -112,7 +112,7 @@ class ValidationActiveTask extends Component {
 
           <ListItem
             hideChevron
-              title={<Picker value={active_task.validation_count} onValueChange={this._onValCountChange} options={this.state.valCountsOptions} />}
+              title={active_task.validation_count == -1 ? <Picker value={active_task.validation_count} onValueChange={this._onValCountChange} options={this.state.valCountsOptions} /> : active_task.validation_count}
             subtitle='VALIDATION COUNT'
           />
           
@@ -161,16 +161,20 @@ class ValidationActiveTask extends Component {
     );
   }
 
-  _onPickerChangeVal = type => this.props.setValidationActiveTask({type})
+  _onPickerChangeVal = validation_type => this.props.setValidationActiveTask({validation_type})
 
   _onUpdateTaskConfirm = () => {
-    let { validation_count } = this.props.validation_list.active_task;
+    let { validation_count, validation_type } = this.props.validation_list.active_task;
     validation_count = parseInt(validation_count);
     
     const isValidValidationCount = validation_count > -1;
     
     if (!isValidValidationCount) {
       alert('Invalid validation count input. Must be numeric and non negative numbers');
+      return;
+    }
+    if (validation_type == '') {
+      alert('validation type is required');
       return;
     }
 
