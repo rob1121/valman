@@ -3,7 +3,7 @@ import {RefreshControl, ScrollView, Alert, View, Text} from 'react-native';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import {Header, ListItem, List } from 'react-native-elements';
-import {filter, toUpper, isEmpty, map} from 'lodash';
+import {uniqBy, filter, toUpper, isEmpty, map} from 'lodash';
 import {setValidationActiveTask, setValidationList} from '../actions';
 import {VALIDATION_LIST_URL} from '../constants';
 import ValidationActiveTask from './ValidationActiveTask';
@@ -12,7 +12,7 @@ import Picker from './Picker';
 class ValidationList extends Component {
   state = {
     refreshing: false,
-    selectedGuest: '',
+    selectedGuest: undefined,
     guestList: [
       {key:'', label:''}
     ]
@@ -64,7 +64,6 @@ class ValidationList extends Component {
     const { selectedGuest } = this.state;
     const filteredList = filter(list, (guest) => {
       guest.guest_name = toUpper(guest.guest_name || '');
-      console.log(guest);
       return guest.guest_name.includes(toUpper(selectedGuest));
     });
     
@@ -74,6 +73,7 @@ class ValidationList extends Component {
         title={`#${task.ticket_number} ${toUpper(task.guest_name || '-')}: ${task.car_plate_no || '-'}`}
         subtitle={
           <View>
+            <Text style={{ color: '#848484' }}>Ticket type: {task.type}</Text>
             <Text style={{ color: '#848484' }}>checkout date: {task.ori_checkout_date}</Text>
             <Text style={{ color: '#848484' }}>validations left: {this._validationCountDisplay(task.validation_count)}</Text>
           </View>
@@ -101,11 +101,10 @@ class ValidationList extends Component {
 
   _errHandler = (error) => console.log(error)
 
-  _refreshValidationList = ({guests}) => {
-
+  _refreshValidationList = ({data}) => {
     const refreshing = false;
     const guestList = map(
-      guests, (guest) => (
+      data, (guest) => (
         { 
           key: toUpper(guest.guest_name || ''), 
           label: toUpper(guest.guest_name || '') 
@@ -114,11 +113,11 @@ class ValidationList extends Component {
     );
 
     this.props.setValidationActiveTask(null);
-    this.props.setValidationList(guests);
+    this.props.setValidationList(data);
     this.setState({
       ...this.state,
       refreshing,
-      guestList
+      guestList: uniqBy(guestList, 'key')
     });
   }
 

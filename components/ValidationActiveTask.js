@@ -137,7 +137,7 @@ class ValidationActiveTask extends Component {
         <Button
           loading={this.state.loading}
           buttonStyle={{backgroundColor: MAIN_COLOR}}
-          title='VALIDATED'
+          title='VALIDATE'
           onPress={this._updateTask}
           />
         <View style={{ height: 200}}  />
