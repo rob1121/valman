@@ -27,10 +27,10 @@ class ValidationActiveTask extends Component {
     const isInitialValidationCount = active_task.validation_count == -1;
     const MIN_COUNT = 1;
     const MAX_COUNT = 20;
-    const counts = range(MIN_COUNT,MAX_COUNT+1);
-    const valCountsOptions = map(counts, (count) => {
-      return { key: count, label: count };
-    });
+    let valCountsOptions = [];
+    
+    for(let i=1; i<=active_task.validation_count; i++)
+      valCountsOptions.push({ key: i, label: i });
 
     this.setState({
       ...this.state, 
@@ -38,7 +38,7 @@ class ValidationActiveTask extends Component {
       valCountsOptions
     });
 
-    this.props.setValidationActiveTask({ validation_type: '' }) //initially not included on active_task info
+    this.props.setValidationActiveTask({ validation_type: '', manager_validation_counts: active_task.validation_count }) //initially not included on active_task info
   }
 
   render() {
@@ -112,11 +112,11 @@ class ValidationActiveTask extends Component {
             subtitle='CAR COLOR'
           />
 
-          {/* <ListItem
+          <ListItem
             hideChevron
-              title={active_task.validation_count == -1 ? <Picker value={active_task.validation_count} onValueChange={this._onValCountChange} options={this.state.valCountsOptions} /> : active_task.validation_count}
+              title={<Picker value={active_task.manager_validation_counts} onValueChange={this._onValidationCountChange} options={this.state.valCountsOptions} />}
             subtitle='VALIDATION COUNT'
-          /> */}
+          />
           
           <ListItem
             hideChevron
@@ -166,10 +166,10 @@ class ValidationActiveTask extends Component {
   _onPickerChangeVal = validation_type => this.props.setValidationActiveTask({validation_type})
 
   _onUpdateTaskConfirm = () => {
-    let { validation_count, validation_type } = this.props.validation_list.active_task;
-    validation_count = parseInt(validation_count);
+    let { manager_validation_counts, validation_type } = this.props.validation_list.active_task;
+    manager_validation_counts = parseInt(manager_validation_counts);
     
-    const isValidValidationCount = validation_count > -1;
+    const isValidValidationCount = manager_validation_counts > -1;
     
     if (!isValidValidationCount) {
       alert('Invalid validation count input. Must be numeric and non negative numbers');
@@ -195,7 +195,7 @@ class ValidationActiveTask extends Component {
     nav.navigate(HOME_NAV);
   }
 
-  _onValCountChange = validation_count => this.props.setValidationActiveTask({ validation_count })
+  _onValidationCountChange = manager_validation_counts => this.props.setValidationActiveTask({ manager_validation_counts })
 
   _errorHandler = error => console.log(error)
 }
