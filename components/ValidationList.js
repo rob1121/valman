@@ -75,7 +75,8 @@ class ValidationList extends Component {
           <View>
             <Text style={{ color: '#848484' }}>Ticket type: {task.type}</Text>
             <Text style={{ color: '#848484' }}>checkout date: {task.ori_checkout_date}</Text>
-            <Text style={{ color: '#848484' }}>validations left: {this._validationCountDisplay(task.validation_count)}</Text>
+            <Text style={{ color: '#848484' }}>validation count: {this._validationCountDisplay(task.days_of_stays)}</Text>
+            <Text style={{ color: '#848484' }}>validated count: {this._validationCountDisplay(task.days_of_stays - task.validation_count)}</Text>
           </View>
         }
         leftIcon={{ name: 'directions-car' }}

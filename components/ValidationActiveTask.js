@@ -37,6 +37,8 @@ class ValidationActiveTask extends Component {
       isInitialValidationCount,
       valCountsOptions
     });
+
+    this.props.setValidationActiveTask({ validation_type: '' }) //initially not included on active_task info
   }
 
   render() {
@@ -110,15 +112,15 @@ class ValidationActiveTask extends Component {
             subtitle='CAR COLOR'
           />
 
-          <ListItem
+          {/* <ListItem
             hideChevron
               title={active_task.validation_count == -1 ? <Picker value={active_task.validation_count} onValueChange={this._onValCountChange} options={this.state.valCountsOptions} /> : active_task.validation_count}
             subtitle='VALIDATION COUNT'
-          />
+          /> */}
           
           <ListItem
             hideChevron
-            title={<Picker value={active_task.type} onValueChange={this._onPickerChangeVal} options={this.state.options} />}
+            title={<Picker value={active_task.validation_type} onValueChange={this._onPickerChangeVal} options={this.state.options} />}
             subtitle='TYPE'
           />
           
