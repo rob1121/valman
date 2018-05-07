@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
-import {Text, FormValidationMessage, FormLabel, FormInput}  from 'react-native-elements';
+import {Button, Text, FormValidationMessage, FormLabel, FormInput}  from 'react-native-elements';
 import {connect} from 'react-redux';
 import {has, toUpper} from 'lodash';
 import axios from 'axios';
@@ -13,7 +13,6 @@ import CarDetailsInput from './RampForm/CarDetailsInput';
 import Comment from './RampForm/Comment';
 import SubmitBtn from './RampForm/SubmitBtn';
 import CheckOutDate from './CheckOutDate';
-import Barcode from './Barcode';
 
 class Transient extends Component {
   state = {
@@ -36,7 +35,7 @@ class Transient extends Component {
         {this.state.hasValidTicket && <FormValidationMessage>{has(error, 'ticketno') && error.ticketno}</FormValidationMessage>}
         {
           this.state.hasValidTicket
-            ? this._hotelForm()
+            ? this._transientForm()
             : <Button
               loading={this.state.loading}
               backgroundColor={MAIN_COLOR}
@@ -68,7 +67,9 @@ class Transient extends Component {
         <FormValidationMessage>{has(error, 'name') && error.name}</FormValidationMessage>
 
         <FormLabel>CHECKOUT DATE</FormLabel>
-        <CheckOutDate date={this.props.car.checkout_date} onDateChange={checkout_date => setCarInfo({ checkout_date })} />
+        <View style={{marginLeft: 15}}>
+          <CheckOutDate date={this.props.car.checkout_date} onDateChange={checkout_date => setCarInfo({ checkout_date })} />
+        </View>
 
         <FormLabel>PAYMENT METHOD</FormLabel>
         <View style={{ marginLeft: 10 }}>
