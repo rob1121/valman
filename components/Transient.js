@@ -57,9 +57,6 @@ class Transient extends Component {
         <Option />
         <FormValidationMessage>{has(error, 'opt') && error.opt}</FormValidationMessage>
 
-        <Barcode />
-        <FormValidationMessage>{has(error, 'ticketno') && error.ticketno}</FormValidationMessage>
-
         <FormLabel>HOTEL NAME</FormLabel>
         <View style={{ margin: 15 }}>
           <Text style={{ marginLeft: 5 }}>{toUpper(car.name)}</Text>
@@ -75,6 +72,7 @@ class Transient extends Component {
         <View style={{ marginLeft: 10 }}>
           <Picker value={car.payment_method} onValueChange={payment_method => setCarInfo({ payment_method })} options={paymentMethodOptions} />
         </View>
+        <FormValidationMessage>{has(error, 'payment_method') && error.payment_method}</FormValidationMessage>
 
 
         <FormLabel>CONTACT NO.</FormLabel>
