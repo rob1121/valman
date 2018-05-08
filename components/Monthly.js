@@ -4,28 +4,44 @@ import {Text, FormValidationMessage, FormLabel, FormInput, Button}  from 'react-
 import {connect} from 'react-redux';
 import {has, toUpper} from 'lodash';
 import axios from 'axios';
-import {SEARCH_MONTHLY_USER_URL, MAIN_COLOR} from '../constants';
+import {FETCH_MONTHLY_GUEST_URL, SEARCH_MONTHLY_USER_URL, MAIN_COLOR} from '../constants';
 import {setCarInfo} from '../actions';
 import Option from './RampForm/Option';
 import CarDetailsInput from './RampForm/CarDetailsInput';
 import Comment from './RampForm/Comment';
 import SubmitBtn from './RampForm/SubmitBtn';
+import Picker from '../components/Picker';
 
 class Monthly extends Component {
   state = {
     hasValidUser: false,
     loading: false,
+    monthly_guest: {},
   }
 
   componentWillMount() {
     this.props.setCarInfo({ name: this.props.selected_location });
+    
+    axios.post(FETCH_MONTHLY_GUEST_URL)
+    .then(({data}) => {
+      this.setState(() => ({ ...this.state, monthly_guest: data }));
+    }).catch((error) => {
+      this.setState(() => ({ loading: false }));
+      console.log(error);
+    });
   }
 
   render() {
     const {setCarInfo, car, error} = this.props;
-    const {hasValidUser, loading} = this.state;
+    const {monthly_guest, hasValidUser, loading} = this.state;
+    //TODO: monthly guest option
+    monthlyGuestOption
     return (
       <View>
+      <FormLabel>NAME</FormLabel>
+      <View style={{marginLeft:10}}>
+        <Picker value={car.name} options={monthlyGuestOption} onValueChange={this._onTicketTypeChange} />
+      </ View>
 
         <FormLabel>CONTACT NO.</FormLabel>
         <FormInput 
@@ -67,7 +83,6 @@ class Monthly extends Component {
       this.setState(() => ({ loading: false }));
       console.log(error);
     });
-
   }
 
   _monthlyForm() {

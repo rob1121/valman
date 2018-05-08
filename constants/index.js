@@ -21,6 +21,7 @@ export const IMG_API_URL = `${ROOT_URL}/api/upload.php`;
 export const REMOVE_IMG_URL = `${ROOT_URL}/api/remove_image.php`;
 export const SEARCH_TICKET_URL = `${ROOT_URL}/api/search_ticket.php`;
 export const SEARCH_MONTHLY_USER_URL = `${ROOT_URL}/api/search_monthly_user.php`;
+export const FETCH_MONTHLY_GUEST_URL = `${ROOT_URL}/api/parking_monthly_options.php`;
 export const VALIDATION_LIST_URL = `${ROOT_URL}/api/validation_list.php`;
 export const VALIDATION_HISTORY_LIST_URL = `${ROOT_URL}/api/validation_history_list.php`;
 export const UPDATE_VALIDATION_TASK_URL = `${ROOT_URL}/api/update_validation_task.php`;
