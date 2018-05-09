@@ -72,7 +72,7 @@ class RampAddCar extends Component {
   _onTicketTypeChange = ticket_type => {
     this.props.resetCarInfo();
     this.props.setErrors({});
-    this.props.setCarInfo({ticket_type, uid: this.props.user.id});
+    this.props.setCarInfo({ ticket_type, uid: this.props.user.id });
   }
 }
 

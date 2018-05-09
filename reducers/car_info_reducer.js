@@ -18,8 +18,9 @@ const INITIAL_STATE = {
   payment_method: '',
   ticketno: '',
   car_plate_no: '',
-  make: '',
-  model: '',
+  car_make: '',
+  car_model: '',
+  car_color: '',
   comment: '',
   location: '',
 };
