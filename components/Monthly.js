@@ -7,16 +7,13 @@ import axios from 'axios';
 import {FETCH_MONTHLY_GUEST_URL, SEARCH_MONTHLY_USER_URL, MAIN_COLOR} from '../constants';
 import {setCarInfo} from '../actions';
 import Option from './RampForm/Option';
-import CarDetailsInput from './RampForm/CarDetailsInput';
 import Comment from './RampForm/Comment';
 import SubmitBtn from './RampForm/SubmitBtn';
 import Picker from '../components/Picker';
 
 class Monthly extends Component {
   state = {
-    showMonthlyForm: false,
-    monthly_guest: [],
-    selectedNameOption: 'option'
+    monthly_guest: []
   }
 
   componentWillMount() {
@@ -24,14 +21,13 @@ class Monthly extends Component {
     .then(({data}) => {
       this.setState(() => ({ ...this.state, monthly_guest: data }));
     }).catch((error) => {
-      this.setState(() => ({ loading: false }));
       console.log(error);
     });
   }
 
   render() {
     const {setCarInfo, car, error} = this.props;
-    const {monthly_guest, hasValidUser, loading} = this.state;
+    const {monthly_guest} = this.state;
     const monthlyGuestOption = map(monthly_guest, (guest) => ({
       key: guest.guest_name,
       label: guest.guest_name,
@@ -40,30 +36,41 @@ class Monthly extends Component {
     return (
       <View>
         <FormLabel>GUEST NAME</FormLabel>
-        <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-          <View style={{flex: 1}}>
-            {this.state.selectedNameOption == 'option'
-              ? <View style={{ marginLeft: 10 }}>
-                  <Picker value={car.guest_name} options={monthlyGuestOption} onValueChange={this._onGuestNameChange} />
-              </View>
-              : <FormInput onChangeText={guest_name => setCarInfo({ guest_name })} value={car.guest_name}/>
-            }
-          </View>
-          <Button
-            backgroundColor={MAIN_COLOR}
-            title={this.state.selectedNameOption == 'option' ? 'manual input' : 'selections'}
-            onPress={() => {
-              setCarInfo({ guest_name: '' })
-              this.setState({ 
-                ...this.state, 
-                showMonthlyForm: true, 
-                selectedNameOption: (this.state.selectedNameOption == 'option' ? 'manual' : 'option')
-              })
-            }}
-            />
+        <View style={{ marginLeft: 15 }}>
+          <Picker value={car.guest_name} options={monthlyGuestOption} onValueChange={this._onGuestNameChange} />
         </View>
         <FormValidationMessage>{has(error,'guest_name') && error.guest_name}</FormValidationMessage>
-        {this.state.showMonthlyForm ? this._monthlyForm() : null }
+        
+         <FormLabel>CONTACT NO.</FormLabel>
+        <View style={{ marginLeft: 20 }}>
+          <Text>{car.contact_no || '-'}</Text>
+        </View>
+          <FormLabel>OPTION</FormLabel>
+          <Option />
+          <FormValidationMessage>{has(error,'opt') && error.opt}</FormValidationMessage>
+          
+          <FormLabel>HOTEL NAME</FormLabel>
+          <View style={{ marginLeft: 20 }}>
+            <Text>{toUpper(car.name) || '-'}</Text>
+          </View>
+          
+          <FormLabel>CAR COLOR</FormLabel>
+          <View style={{ marginLeft: 20 }}>
+            <Text>{toUpper(car.car_colore) || '-'}</Text>
+          </View>
+      
+          <FormLabel>CAR PLATE NO</FormLabel>
+          <View style={{ marginLeft: 20 }}>
+            <Text>{toUpper(car.car_plate_no) || '-'}</Text>
+          </View>
+  
+          <FormLabel>CAR MAKE&MODEL</FormLabel>
+          
+          <View style={{ marginLeft: 20 }}>
+            <Text>{toUpper(car.car_model) || '-'}</Text>
+          </View>
+          <Comment />
+          <SubmitBtn />
       </View>
     );
   }
@@ -74,38 +81,6 @@ class Monthly extends Component {
 
     if (index > INVALID_INDEX)
       this.props.setCarInfo(this.state.monthly_guest[index]);
-
-    this.setState({showMonthlyForm: true});
-  }
-
-  _monthlyForm() {
-    const {setCarInfo, car, error} = this.props;
-    return (
-      <View>
-
-        <FormLabel>CONTACT NO.</FormLabel>
-        <FormInput
-          onChangeText={contact_no => setCarInfo({ contact_no })}
-          value={car.contact_no}
-          placeholder='09xxxxxxxxx'
-          dataDetectorTypes='phoneNumber'
-          keyboardType='phone-pad' />
-          
-        <FormLabel>OPTION</FormLabel>
-        <Option />
-        <FormValidationMessage>{has(error,'opt') && error.opt}</FormValidationMessage>
-        
-        <FormLabel>HOTEL NAME</FormLabel>
-        <View style={{ margin: 15 }}>
-          <Text>{toUpper(car.name)}</Text>
-        </View>
-
-        <CarDetailsInput />
-        <Comment />
-        <SubmitBtn />
-      </View>
-
-    )
   }
 }
 
