@@ -34,7 +34,10 @@ export default (state = INITIAL_STATE, action) => {
       };
     }
     case RESET_CAR_INFO: {
-      return INITIAL_STATE
+      return {
+        ...INITIAL_STATE,
+        ...action.payload
+      }
     }
     default:
       return state;

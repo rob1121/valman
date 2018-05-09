@@ -33,26 +33,27 @@ class Monthly extends Component {
     const {setCarInfo, car, error} = this.props;
     const {monthly_guest, hasValidUser, loading} = this.state;
     const monthlyGuestOption = map(monthly_guest, (guest) => ({
-      key: guest.name,
-      label: guest.name,
+      key: guest.guest_name,
+      label: guest.guest_name,
     }));
 
     return (
       <View>
-        <FormLabel>NAME</FormLabel>
+        <FormLabel>GUEST NAME</FormLabel>
         <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
           <View style={{flex: 1}}>
             {this.state.selectedNameOption == 'option'
               ? <View style={{ marginLeft: 10 }}>
-                  <Picker value={car.name} options={monthlyGuestOption} onValueChange={this._onGuestNameChange} />
+                  <Picker value={car.guest_name} options={monthlyGuestOption} onValueChange={this._onGuestNameChange} />
               </View>
-              : <FormInput value={car.name} onValueChange={name => setCarInfo({ name })} />
+              : <FormInput onChangeText={guest_name => setCarInfo({ guest_name })} value={car.guest_name}/>
             }
           </View>
           <Button
             backgroundColor={MAIN_COLOR}
             title={this.state.selectedNameOption == 'option' ? 'manual input' : 'selections'}
             onPress={() => {
+              setCarInfo({ guest_name: '' })
               this.setState({ 
                 ...this.state, 
                 showMonthlyForm: true, 
@@ -61,14 +62,15 @@ class Monthly extends Component {
             }}
             />
         </View>
+        <FormValidationMessage>{has(error,'guest_name') && error.guest_name}</FormValidationMessage>
         {this.state.showMonthlyForm ? this._monthlyForm() : null }
       </View>
     );
   }
 
-  _onGuestNameChange = (guestName) => {
+  _onGuestNameChange = guestName => {
     const INVALID_INDEX = -1;
-    const index = findIndex(this.state.monthly_guest, {name: guestName});
+    const index = findIndex(this.state.monthly_guest, {guest_name: guestName});
 
     if (index > INVALID_INDEX)
       this.props.setCarInfo(this.state.monthly_guest[index]);
@@ -83,7 +85,7 @@ class Monthly extends Component {
 
         <FormLabel>CONTACT NO.</FormLabel>
         <FormInput
-          onChangeText={(val) => setCarInfo({ contact_no: val })}
+          onChangeText={contact_no => setCarInfo({ contact_no })}
           value={car.contact_no}
           placeholder='09xxxxxxxxx'
           dataDetectorTypes='phoneNumber'
@@ -95,7 +97,7 @@ class Monthly extends Component {
         
         <FormLabel>HOTEL NAME</FormLabel>
         <View style={{ margin: 15 }}>
-          <Text>{toUpper(car.location)}</Text>
+          <Text>{toUpper(car.name)}</Text>
         </View>
 
         <CarDetailsInput />
