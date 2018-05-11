@@ -56,7 +56,7 @@ class Monthly extends Component {
           
           <FormLabel>CAR COLOR</FormLabel>
           <View style={{ marginLeft: 20 }}>
-            <Text>{toUpper(car.car_colore) || '-'}</Text>
+            <Text>{toUpper(car.car_color) || '-'}</Text>
           </View>
       
           <FormLabel>CAR PLATE NO</FormLabel>
