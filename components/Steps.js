@@ -17,7 +17,7 @@ class Steps extends Component {
 
   render() {
     const {active_task} = this.props.car_assign;
-
+console.log(active_task);
     if(active_task.status_id === WAITING_DISPATCHER) {
       return (
         <View style={{ flex: 1 }}>
