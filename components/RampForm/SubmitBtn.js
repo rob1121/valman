@@ -4,7 +4,7 @@ import {Button} from 'react-native-elements';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import {setCarInfo, setErrors, resetCarInfo} from '../../actions';
-import {MAIN_COLOR, HOME_NAV, ADD_CAR_URL} from '../../constants';
+import {MAIN_COLOR, CAR_AVAILABLE_LIST_NAV, ADD_CAR_URL} from '../../constants';
 
 
 class SubmitBtn extends Component {
@@ -40,7 +40,7 @@ class SubmitBtn extends Component {
       } else {
         this.props.setErrors({});
         this.props.resetCarInfo();
-        this.props.nav.navigate(HOME_NAV);
+        this.props.nav.navigate(CAR_AVAILABLE_LIST_NAV);
       }
     }).catch((error) => {
       this.setState(() => ({ loading: false }));
