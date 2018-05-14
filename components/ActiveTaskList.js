@@ -23,10 +23,6 @@ class ActiveTaskList extends Component {
     this.props.setActiveScreen(HOME_NAV);
   }
 
-  componentWillUnmount() {
-    this.backHandlerListener.remove();
-  }
-
   _errHandler = error => console.log(error);
 
   _fetchActiveTaskList = () => {

@@ -66,6 +66,12 @@ class ValidationActiveTask extends Component {
           
           <ListItem
             hideChevron
+            title={active_task.customer || '-'}
+            subtitle='HOTEL'
+          />
+          
+          <ListItem
+            hideChevron
             title={active_task.guest_name || '-'}
             subtitle='GUEST NAME'
           />
