@@ -23,6 +23,4 @@ export const SET_VALIDATION_LIST = 'set_validation_list';
 export const SET_SELECTED_ACTIVE_TASK = 'set_selected_active_task';
 export const SET_ACTIVE_TASK_LIST = 'set_active_task_list';
 export const HAS_ACTIVE_CAR = 'has_active_car';
-
-
-export * from './validation_list_actions';
+export const SET_IMAGES = 'set_images';

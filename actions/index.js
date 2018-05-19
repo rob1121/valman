@@ -6,3 +6,4 @@ export * from './car_info_actions';
 export * from './error_actions';
 export * from './validation_list_actions';
 export * from './active_task_list_actions';
+export * from './gallery_actions';

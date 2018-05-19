@@ -8,7 +8,7 @@ import Barcode from 'react-native-barcode-builder';
 import { hasActiveCar, assignCars, updateActiveCar} from '../actions';
 import { CAR_ASSIGN_URL, HOME_NAV, DEFAULT_IMG, MAIN_COLOR, PARKING_STATUS_UPDATE_URL, WAITING_DISPATCHER, CAMERA_NAV } from '../constants';
 import CarPicker from './CarPicker';
-import CameraAction from '../components/Camera';
+import Gallery from '../components/Gallery/Index';
 
 class Steps extends Component {
   state = {
@@ -126,7 +126,7 @@ class Steps extends Component {
           />
         </List>
           
-        <CameraAction />
+        <Gallery />
         <Button
           loading={this.state.loading}
           buttonStyle={{backgroundColor: MAIN_COLOR}}

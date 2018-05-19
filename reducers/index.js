@@ -7,7 +7,8 @@ import car from './car_info_reducer';
 import error from './error_reducer';
 import validation_list from './validation_list_reducer';
 import active_task_list from './active_task_list_reducer';
+import gallery from './gallery_reducer';
 
 export default combineReducers({
-  user, car, car_assign, selected_location, nav, error, validation_list, active_task_list
+  user, car, car_assign, selected_location, nav, error, validation_list, active_task_list, gallery
 });

@@ -42,8 +42,8 @@ class LoginScreen extends Component
 
   async _login() {
     const { username, password }  = this.props.user;
-    const token = await expoToken();
-    // const token = null;
+    // const token = await expoToken();
+    const token = null;
     this.setState(() => ({loading: true}));
     axios.post(LOGIN_URL,{
       token,
