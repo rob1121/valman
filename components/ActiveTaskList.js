@@ -6,6 +6,7 @@ import { isEmpty, toUpper, map, filter, toLower } from 'lodash';
 import axios from 'axios';
 import { Notifications } from 'expo';
 import { setActiveScreen, setActiveTaskList } from '../actions';
+import {errorHandler} from '../utilities';
 import { HOME_NAV, MAIN_COLOR, ACTIVE_TASK_LIST_URL } from '../constants';
 import RampLocation from './RampLocation';
 import Footer from './Footer';
@@ -22,19 +23,17 @@ class ActiveTaskList extends Component {
     this._fetchActiveTaskList();
     this.props.setActiveScreen(HOME_NAV);
   }
-
-  _errHandler = error => console.log(error);
-
   _fetchActiveTaskList = () => {
     this.setState(() => ({ refreshing: true }));
     axios.post(ACTIVE_TASK_LIST_URL, { base: this.props.user.base })
       .then(this._updateActiveTaskList)
-      .catch(this._errHandler)
+      .catch(errorHandler)
       ;
   }
 
   _updateActiveTaskList = ({ data }) => {
     this.props.setActiveTaskList(data);
+
     this.setState(() => ({ refreshing: false }));
   }
 

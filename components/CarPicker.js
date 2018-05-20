@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {View} from 'react-native';
 import axios from 'axios';
 import { map, toUpper } from 'lodash';
-import {CAR_LIST_URL} from '../constants';
+import { CAR_LIST_URL } from '../constants';
+import { errorHandler } from '../utilities';
 import Picker from './Picker';
 
 export default class CarPicker extends Component {
@@ -12,7 +13,7 @@ export default class CarPicker extends Component {
   componentDidMount() {
     axios.get(CAR_LIST_URL)
       .then(this._setOption)
-      .catch(this._errHandler)
+      .catch(errorHandler)
     ;
   }
 
@@ -25,8 +26,6 @@ export default class CarPicker extends Component {
     });
     this.setState(() => ({...this.state, options}));
   }
-  
-  _errHandler = error   => console.error(error);
 
   render() {
     const {value, onValueChange} = this.props;
