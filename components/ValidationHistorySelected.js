@@ -7,6 +7,7 @@ import { toUpper } from 'lodash';
 import Barcode from 'react-native-barcode-builder';
 import Picker from './Picker'
 import { setValidationActiveTask } from '../actions';
+import { errorHandler } from '../utilities';
 import { UPDATE_VALIDATION_TASK_URL, MAIN_COLOR, HOME_NAV } from '../constants';
 
 class ValidationActiveTask extends Component {
@@ -154,7 +155,7 @@ class ValidationActiveTask extends Component {
     this.setState({ loading: true });
     axios.post(UPDATE_VALIDATION_TASK_URL, this.props.validation_list.active_task)
       .then(this._processUpdateTaskResponse)
-      .catch(this._errorHandler)
+      .catch(errorHandler)
       ;
   }
 
@@ -165,8 +166,6 @@ class ValidationActiveTask extends Component {
     setValidationActiveTask(null);
     nav.navigate(HOME_NAV);
   }
-
-  _errorHandler = error => console.log(error)
 }
 
 const stateToProps = ({ validation_list, nav }) => ({ validation_list, nav });

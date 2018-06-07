@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toUpper, toLower, filter, isEmpty, map } from 'lodash';
 import {LOCATION_FILTER_URL, PARKING_STATUS_UPDATE_URL, CAR_ASSIGN_URL} from '../constants';
 import {assignCars, updateActiveCar, hasActiveCar} from '../actions';
+import { errorHandler } from '../utilities';
 import { connect } from 'react-redux';
 import Steps from '../components/Steps';
 import Footer from '../components/Footer';
@@ -40,7 +41,7 @@ class CarAvailable extends Component {
     this.setState({ ...this.state, refreshing: true});
     axios.post(CAR_ASSIGN_URL, this.props.user)
       .then(this._updateCarList)
-      .catch(this._errHandler)
+      .catch(errorHandler)
     ;
   }
 
@@ -56,7 +57,7 @@ class CarAvailable extends Component {
     const {user} = this.props;
     axios.post(PARKING_STATUS_UPDATE_URL, {task, user})
       .then(this._setCars)
-      .catch(this._errHandler)
+      .catch(errorHandler)
     ;
   }
 
@@ -66,8 +67,6 @@ class CarAvailable extends Component {
     this.props.assignCars(data.data.task_list);
     this.setState({ ...this.state, refreshing: false });
   }
-  
-  _errHandler = error   => console.error(error);
 
   _listItem(carsAssign) {
     const listItems = map(carsAssign, (task, i) => {

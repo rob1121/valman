@@ -17,6 +17,7 @@ export const LOCATION_FILTER_URL = `${ROOT_URL}/api/location_filter.php`;
 export const ADD_CAR_URL = `${ROOT_URL}/api/ramp_add_car.php`;
 export const CAR_LIST_URL = `${ROOT_URL}/api/car_list.php`;
 export const DEFAULT_IMG = `upload/default.png`;
+export const FETCH_IMAGES = `${ROOT_URL}/api/fetch_images.php`; 
 export const IMG_API_URL = `${ROOT_URL}/api/upload.php`;
 export const REMOVE_IMG_URL = `${ROOT_URL}/api/remove_image.php`;
 export const SEARCH_TICKET_URL = `${ROOT_URL}/api/search_ticket.php`;

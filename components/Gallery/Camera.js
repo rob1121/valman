@@ -3,7 +3,8 @@ import {Alert, ActivityIndicator} from 'react-native';
 import {Icon} from 'react-native-elements';
 import Exponent, { ImagePicker, Permissions } from 'expo';
 import {connect} from 'react-redux';
-import {setImages} from '../../actions';
+import { setImages } from '../../actions';
+import { errorHandler } from '../../utilities';
 import { IMG_API_URL } from '../../constants';
 
 
@@ -61,11 +62,10 @@ class Camera extends React.Component {
       const {setImages}    = this.props;
       const uploadResponse = await this._uploadImageAsync(pickerResult.uri);
       const uploadResult   = await uploadResponse.json();
-      console.log(uploadResult.data);
       if (!uploadResult.error) setImages(uploadResult.data);
       else alert(uploadResult.msg);
     } catch (error) {
-      console.log('error',error);
+      errorHandler(error);
     } finally {
       this.setState({uploading: false});
     }
