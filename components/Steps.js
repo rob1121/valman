@@ -8,7 +8,7 @@ import Barcode from 'react-native-barcode-builder';
 import { hasActiveCar, assignCars, updateActiveCar} from '../actions';
 import { CAR_ASSIGN_URL, HOME_NAV, DEFAULT_IMG, MAIN_COLOR, PARKING_STATUS_UPDATE_URL, WAITING_DISPATCHER, CAMERA_NAV } from '../constants';
 import CarPicker from './CarPicker';
-import Gallery from '../components/Gallery';
+import Gallery from './Gallery';
 
 class Steps extends Component {
   state = {
