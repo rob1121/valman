@@ -4,12 +4,19 @@ import {  View, ScrollView, Alert, RefreshControl } from 'react-native';
 import { Text, List, ListItem, Header, FormLabel } from 'react-native-elements';
 import axios from 'axios';
 import { toUpper, toLower, filter, isEmpty, map } from 'lodash';
-import {LOCATION_FILTER_URL, PARKING_STATUS_UPDATE_URL, CAR_ASSIGN_URL} from '../constants';
+import {
+  LOCATION_FILTER_URL,
+  PARKING_STATUS_UPDATE_URL,
+  CAR_ASSIGN_URL,
+  RED,
+  WHITE,
+} from '../constants';
 import {assignCars, updateActiveCar, hasActiveCar} from '../actions';
 import { errorHandler } from '../utilities';
 import { connect } from 'react-redux';
 import Steps from '../components/Steps';
 import Footer from '../components/Footer';
+
 
 class CarAvailable extends Component {
   state = {
