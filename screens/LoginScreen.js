@@ -20,6 +20,7 @@ import {
   MAIN_COLOR,
   LOGIN_NAV,
   HOME_NAV,
+  IS_DEV,
 } from '../constants';
 import { connect } from 'react-redux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -42,8 +43,7 @@ class LoginScreen extends Component
 
   async _login() {
     const { username, password }  = this.props.user;
-    const token = await expoToken();
-    // const token = null;
+    const token = IS_DEV ? '' : await expoToken();
     this.setState(() => ({loading: true}));
     axios.post(LOGIN_URL,{
       token,
@@ -53,7 +53,7 @@ class LoginScreen extends Component
       this.setState(() => ({ loading: false }));
       if(data.error) {
         this.setState(() => ({ ...this.state, hasStoredData: false}));
-        alert(data.msg);;
+        alert(data.msg);
       } else {
         AsyncStorage.multiSet([['username', username], ['password', password]]);
   
