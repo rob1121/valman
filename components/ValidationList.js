@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {RefreshControl, ScrollView, Alert, View, Text} from 'react-native';
+import {RefreshControl, ScrollView, View, Text} from 'react-native';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import {Header, ListItem, List } from 'react-native-elements';

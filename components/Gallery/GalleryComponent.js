@@ -2,19 +2,16 @@ import React from 'react';
 import {
   Alert,
   View,
-  Modal,
-  TouchableHighlight
 } from 'react-native';
-import {Text, Button} from 'react-native-elements';
+import {Text} from 'react-native-elements';
 import axios from 'axios';
-import Exponent, { ImagePicker, Permissions } from 'expo';
 import {map, chunk, size} from 'lodash';
 import { connect } from 'react-redux';
 import ImagePreview from 'react-native-image-preview';
 
 import { setImages } from '../../actions';
 import { generateImagePath, errorHandler } from '../../utilities';
-import { DEFAULT_IMG, IMG_API_URL, REMOVE_IMG_URL, EMPTY } from '../../constants';
+import { DEFAULT_IMG, REMOVE_IMG_URL, EMPTY } from '../../constants';
 import Camera from './Camera';
 import Image from './Image';
 

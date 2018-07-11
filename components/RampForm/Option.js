@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
-import {FormLabel} from 'react-native-elements';
 import {connect} from 'react-redux';
 import Picker from '../Picker'
 import {setCarInfo} from '../../actions';

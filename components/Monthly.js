@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
-import {Text, FormValidationMessage, FormLabel, FormInput, Button}  from 'react-native-elements';
+import {Text, FormValidationMessage, FormLabel}  from 'react-native-elements';
 import {connect} from 'react-redux';
 import {has, toUpper, map, findIndex} from 'lodash';
 import axios from 'axios';
-import {FETCH_MONTHLY_GUEST_URL, SEARCH_MONTHLY_USER_URL, MAIN_COLOR} from '../constants';
+import {FETCH_MONTHLY_GUEST_URL} from '../constants';
 import {setCarInfo} from '../actions';
 import Option from './RampForm/Option';
 import Comment from './RampForm/Comment';
@@ -26,7 +26,7 @@ class Monthly extends Component {
   }
 
   render() {
-    const {setCarInfo, car, error} = this.props;
+    const {car, error} = this.props;
     const {monthly_guest} = this.state;
     const monthlyGuestOption = map(monthly_guest, (guest) => ({
       key: guest.guest_name,

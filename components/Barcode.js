@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Modal, StyleSheet } from 'react-native';
+import { View, Modal, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo';
 import {connect} from 'react-redux';
 import {Icon, FormInput, FormLabel} from 'react-native-elements';

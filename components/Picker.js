@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {Text, Button, FormInput} from 'react-native-elements';
+import {Text} from 'react-native-elements';
 import { toUpper, findIndex} from 'lodash';
 import ModalFilterPicker from 'react-native-modal-filter-picker'
 

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import { View} from 'react-native';
-import {Text, FormLabel, FormInput, Icon, FormValidationMessage, Button}  from 'react-native-elements';
+import {Text, FormLabel, FormInput, FormValidationMessage, Button}  from 'react-native-elements';
 import {connect} from 'react-redux';
 import {has, toUpper} from 'lodash';
 import axios from 'axios';
-import {WIN_WIDTH, MAIN_COLOR, SEARCH_TICKET_URL} from '../constants';
+import {MAIN_COLOR, SEARCH_TICKET_URL} from '../constants';
 import {setCarInfo} from '../actions';
 import Barcode from './Barcode';
 import Option from './RampForm/Option';

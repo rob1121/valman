@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
 import axios from 'axios';
 import { map, toUpper } from 'lodash';
 import { CAR_LIST_URL } from '../constants';

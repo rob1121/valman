@@ -1,7 +1,7 @@
 import React from 'react';
 import {Alert, ActivityIndicator} from 'react-native';
 import {Icon} from 'react-native-elements';
-import Exponent, { ImagePicker, Permissions } from 'expo';
+import { ImagePicker, Permissions } from 'expo';
 import {connect} from 'react-redux';
 import { setImages } from '../../actions';
 import { errorHandler } from '../../utilities';

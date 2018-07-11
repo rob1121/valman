@@ -3,7 +3,7 @@ import {TextInput, Alert, View, ScrollView, Text} from 'react-native';
 import {Button, Header, List, ListItem, Icon} from 'react-native-elements';
 import axios from 'axios';
 import {connect} from 'react-redux';
-import {toUpper, range, map} from 'lodash';
+import {toUpper} from 'lodash';
 import Barcode from 'react-native-barcode-builder';
 import Picker from './Picker'
 import { setValidationActiveTask } from '../actions';

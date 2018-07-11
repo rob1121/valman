@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { ScrollView, RefreshControl, View, BackHandler, Text, AsyncStorage, ActivityIndicator } from 'react-native';
+import { ScrollView, RefreshControl, View, Text } from 'react-native';
 import { FormLabel, Header, List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { isEmpty, toUpper, map, filter, toLower } from 'lodash';
 import axios from 'axios';
-import { Notifications } from 'expo';
 import { setActiveScreen, setActiveTaskList } from '../actions';
 import {errorHandler} from '../utilities';
-import { HOME_NAV, MAIN_COLOR, ACTIVE_TASK_LIST_URL } from '../constants';
+import { HOME_NAV, ACTIVE_TASK_LIST_URL } from '../constants';
 import RampLocation from './RampLocation';
 import Footer from './Footer';
 import ActiveTaskListSelected from './ActiveTaskListSelected';

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { BackHandler} from 'react-native';
-import { Icon } from 'react-native-elements';
 import { StackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
 import store from './store/index';
@@ -17,6 +15,7 @@ export default class App extends Component {
     
     const navOption = {
       header: null,
+      gesturesEnabled: false,
     };
 
     const navOptionWithHeader = (title) => ({

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { TextInput, Alert, View, ScrollView, Text } from 'react-native';
-import { Button, Header, List, ListItem, Icon } from 'react-native-elements';
+import { Alert, View, ScrollView, Text } from 'react-native';
+import { Header, List, ListItem, Icon } from 'react-native-elements';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { toUpper } from 'lodash';
 import Barcode from 'react-native-barcode-builder';
-import Picker from './Picker'
 import { setValidationActiveTask } from '../actions';
 import { errorHandler } from '../utilities';
-import { UPDATE_VALIDATION_TASK_URL, MAIN_COLOR, HOME_NAV } from '../constants';
+import { UPDATE_VALIDATION_TASK_URL, HOME_NAV } from '../constants';
 
 class ValidationActiveTask extends Component {
   state = {

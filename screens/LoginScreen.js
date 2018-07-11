@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import {
-  Notifications,
-} from 'expo';
 import { 
   ScrollView,
   TextInput,
   View,
-  Alert,
   Text,
   AsyncStorage,
   ActivityIndicator,

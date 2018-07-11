@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
-import { View, BackHandler, AsyncStorage, ActivityIndicator } from 'react-native';
+import { View, BackHandler } from 'react-native';
 import {connect} from 'react-redux';
-import axios from 'axios';
 import { setActiveScreen } from '../actions';
-import {HOME_NAV, MAIN_COLOR } from '../constants';
+import {HOME_NAV } from '../constants';
 import Footer from '../components/Footer';
 import ActiveTaskList from '../components/ActiveTaskList';
 import ValidationList from '../components/ValidationList';
-import Steps from '../components/Steps';
 import CarAvailable from '../components/CarAvailable';
 
 class HomeScreen extends Component {
   componentWillMount() {
     this.backHandlerListener = BackHandler.addEventListener('hardwareBackPress', this._onBackPress);
-
     this.props.setActiveScreen(HOME_NAV);
   }
 
