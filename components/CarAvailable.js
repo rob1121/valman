@@ -77,7 +77,7 @@ class CarAvailable extends Component {
 
       const iconStyle = task.is_late_checkout ? {style: {color: 'red'}} : {};
       return (<ListItem
-        containerStyle={{backgroundColor: (toLower(task.status_title) == 'for pickup' ? '#f1404b' : '#fff') }}
+        containerStyle={{backgroundColor: (toLower(task.opt) == 'pickup' ? '#FFCCCC' : '#fff') }}
         key={i}
         title={`${toUpper(task.requestor)}: ${toUpper(task.opt)}`}
         subtitle={`#${task.ticketno} ${task.status_title}`}

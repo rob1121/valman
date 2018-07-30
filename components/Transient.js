@@ -67,6 +67,7 @@ class Transient extends Component {
         <View style={{marginLeft: 15}}>
           <CheckOutDate date={this.props.car.checkout_date} onDateChange={checkout_date => setCarInfo({ checkout_date })} />
         </View>
+        <FormValidationMessage>{has(error,'checkout_date') && error.checkout_date}</FormValidationMessage>
 
         <FormLabel>PAYMENT METHOD</FormLabel>
         <View style={{ marginLeft: 10 }}>

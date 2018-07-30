@@ -1,1 +1,1 @@
-export const errorHandler = error => console.log(error);
+export const errorHandler = error => console.log(error.response);

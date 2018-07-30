@@ -30,7 +30,6 @@ class RampLocation extends Component  {
   _setLocationList = ({ data }) => {
     const list = map(data, item => ({ key: item.value, label: toUpper(item.label) }));
     this.setState(() => ({ ...this.state, list }));
-
     if (this.props.selected_location == '') {
       this.props.setSelectedLocation(data[0].value);
     }
