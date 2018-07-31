@@ -2,11 +2,18 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { View, Alert, ScrollView, TextInput} from 'react-native';
 import axios from 'axios';
-import {toUpper} from 'lodash';
+import {toUpper, isEmpty} from 'lodash';
 import { Header, Button, List, ListItem, Text} from 'react-native-elements';
 import Barcode from 'react-native-barcode-builder';
 import { hasActiveCar, assignCars, updateActiveCar} from '../actions';
-import { MAIN_COLOR, PARKING_STATUS_UPDATE_URL, WAITING_DISPATCHER } from '../constants';
+import { 
+  MAIN_COLOR, 
+  PARKING_STATUS_UPDATE_URL, 
+  ARRIVED_AT_THE_GARAGE,
+  VEHICLE_ON_THE_WAY, 
+  WAITING_DISPATCHER, 
+  VALET_ON_THE_WAY 
+} from '../constants';
 import CarPicker from './CarPicker';
 import Gallery from './Gallery';
 
@@ -78,7 +85,7 @@ class Steps extends Component {
           
           <ListItem
             hideChevron
-            title={(active_task.status_id == 2 || active_task.status_id == 4) 
+            title={(active_task.status_id == VALET_ON_THE_WAY || active_task.status_id == VEHICLE_ON_THE_WAY) 
               ? <CarPicker 
                   value={active_task.car_model} 
                   onValueChange={car_model => this.props.updateActiveCar({car_model})}
@@ -89,7 +96,7 @@ class Steps extends Component {
 
           <ListItem
             hideChevron
-            title={(active_task.status_id == 2 || active_task.status_id == 4)
+            title={(active_task.status_id == VALET_ON_THE_WAY || active_task.status_id == VEHICLE_ON_THE_WAY)
               ? <TextInput
                 underlineColorAndroid='#000'
                 style={{ padding: 5, marginTop: 10 }}
@@ -101,7 +108,7 @@ class Steps extends Component {
 
           <ListItem
             hideChevron
-            title={(active_task.status_id == 2 || active_task.status_id == 4)
+            title={(active_task.status_id == VALET_ON_THE_WAY || active_task.status_id == VEHICLE_ON_THE_WAY)
               ? <TextInput
                 underlineColorAndroid='#000'
                 style={{ padding: 5, marginTop: 10 }}
@@ -110,10 +117,22 @@ class Steps extends Component {
               : (toUpper(active_task.car_color) || '-')}
             subtitle='CAR COLOR'
           />
+
+          <ListItem
+            hideChevron
+            title={(active_task.status_id == ARRIVED_AT_THE_GARAGE)
+              ? <TextInput
+                underlineColorAndroid='#000'
+                style={{ padding: 5, marginTop: 10 }}
+                onChangeText={floor_number => this.props.updateActiveCar({floor_number})}
+                value={active_task.floor_number} />
+              : (toUpper(active_task.floor_number) || '-')}
+            subtitle='FLOOR NUMBER'
+          />
           
           <ListItem
             hideChevron
-            title={(active_task.status_id == 2 || active_task.status_id == 4) 
+            title={(active_task.status_id == VALET_ON_THE_WAY || active_task.status_id == VEHICLE_ON_THE_WAY) 
               ? <TextInput
                 multiline={true}
                 numberOfLines={4}
@@ -151,6 +170,11 @@ class Steps extends Component {
   }
 
   _updateStatus = () => {
+    if(this.props.car_assign.active_task.status_id == ARRIVED_AT_THE_GARAGE && 
+       isEmpty(this.props.car_assign.active_task.floor_number)) {
+      alert('Floor number is required');
+      return;
+    }
     const params = {
       task: this.props.car_assign.active_task,
       user: this.props.user,
