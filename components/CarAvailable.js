@@ -93,7 +93,7 @@ class CarAvailable extends Component {
 
   render() {
     const { emptyTaskContainer} = styles;
-    const { car_assign, nav, user, selected_location} = this.props;
+    const { car_assign} = this.props;
     const header = (
       <Header
         centerComponent={{ text: 'TASK LIST FOR YOU', style: { color: '#fff' } }}
@@ -153,6 +153,6 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ user, nav, car_assign }) => ({ user, nav, car_assign });
+const mapStateToProps = ({ user, car_assign }) => ({ user, car_assign });
 
 export default connect(mapStateToProps, {assignCars, updateActiveCar, hasActiveCar})(CarAvailable)
