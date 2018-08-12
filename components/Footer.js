@@ -30,8 +30,8 @@ class Footer extends Component {
   }
 
   _resetUser = () => {
-    const {token} = this.props.user;
-    axios.post(LOGOUT_URL, {token}).then(({data}) => {
+    const {user} = this.props;
+    axios.post(LOGOUT_URL, {user}).then(({data}) => {
 
       AsyncStorage.multiRemove(['username','password']);
       this.props.logoutUser();
