@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { View, Alert, ScrollView, TextInput} from 'react-native';
 import axios from 'axios';
-import {toUpper, isEmpty} from 'lodash';
+import {toLower, toUpper, isEmpty} from 'lodash';
 import { Header, Button, List, ListItem, Text} from 'react-native-elements';
 import Barcode from 'react-native-barcode-builder';
 import { hasActiveCar, assignCars, updateActiveCar} from '../actions';
@@ -120,7 +120,7 @@ class Steps extends Component {
 
           <ListItem
             hideChevron
-            title={(active_task.status_id == ARRIVED_AT_THE_GARAGE)
+            title={(toLower(active_task.opt) == 'pickup')
               ? <TextInput
                 underlineColorAndroid='#000'
                 style={{ padding: 5, marginTop: 10 }}
