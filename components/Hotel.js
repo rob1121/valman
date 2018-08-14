@@ -90,11 +90,11 @@ class Hotel extends Component {
         <FormLabel>OPTION</FormLabel>
         <Option />
         <FormValidationMessage>{has(error,'opt') && error.opt}</FormValidationMessage>
-        
+{/*         
         {car.opt == 'delivery' && <FormLabel>FLOOR NUMBER</FormLabel>}
         {car.opt == 'delivery' && <FormInput onChangeText={floor_number => setCarInfo({floor_number})} value={car.floor_number} />}
         {car.opt == 'delivery' && <FormValidationMessage>{has(error,'floor_number') && error.floor_number}</FormValidationMessage>}
-        
+         */}
         <FormLabel>GUEST NAME</FormLabel>
         <FormInput onChangeText={guest_name => setCarInfo({guest_name})} value={car.guest_name} />
           <FormValidationMessage>{has(error,'guest_name') && error.guest_name}</FormValidationMessage>

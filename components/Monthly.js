@@ -48,11 +48,11 @@ class Monthly extends Component {
           <FormLabel>OPTION</FormLabel>
           <Option />
           <FormValidationMessage>{has(error,'opt') && error.opt}</FormValidationMessage>
-          
+{/*           
           {car.opt == 'delivery' && <FormLabel>FLOOR NUMBER</FormLabel>}
           {car.opt == 'delivery' && <FormInput onChangeText={floor_number => setCarInfo({floor_number})} value={car.floor_number} />}
           {car.opt == 'delivery' && <FormValidationMessage>{has(error,'floor_number') && error.floor_number}</FormValidationMessage>}
-        
+         */}
           
           <FormLabel>HOTEL NAME</FormLabel>
           <View style={{ marginLeft: 20 }}>
